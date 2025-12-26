@@ -1,1 +1,238 @@
-<h2>This is meeting members list page</h2>
+@{
+    ViewData["Title"] = "Meeting Members";
+}
+
+<div class="pagetitle">
+    <h1>Meeting Members</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">Meetings</li>
+            <li class="breadcrumb-item active">Meeting Members</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card department-card">
+                <div class="card-body">
+
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-people text-primary me-1"></i>
+                            Meeting Member List
+                        </h5>
+
+                        <a asp-controller="MeetingMember"
+                           asp-action="MeetingMemberAddEdit"
+                           class="btn btn-primary btn-sm rounded-pill px-3">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Member
+                        </a>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table id="meetingMemberTable"
+                               class="table table-hover align-middle department-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:6%">ID</th>
+                                    <th>Meeting</th>
+                                    <th>Staff Name</th>
+                                    <th>Department</th>
+                                    <th>Presence</th>
+                                    <th>Remarks</th>
+                                    <th style="width:15%" class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Board Meeting – 01 Mar 2024</td>
+                                    <td>Raj Patel</td>
+                                    <td>Administration</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>Attended full meeting</td>
+                                    <td class="text-center">
+                                        <a asp-action="MeetingMemberAddEdit" asp-route-id="1"
+                                           class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td>Client Meeting – 02 Mar 2024</td>
+                                    <td>Neha Sharma</td>
+                                    <td>IT</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>On leave</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>3</td>
+                                    <td>Team Stand-up – 03 Mar 2024</td>
+                                    <td>Amit Joshi</td>
+                                    <td>Finance</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>4</td>
+                                    <td>Project Review – 04 Mar 2024</td>
+                                    <td>Pooja Mehta</td>
+                                    <td>Marketing</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>Presented project update</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>5</td>
+                                    <td>Training Session – 05 Mar 2024</td>
+                                    <td>Ravi Desai</td>
+                                    <td>Operations</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>Completed training</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>6</td>
+                                    <td>Audit Meeting – 06 Mar 2024</td>
+                                    <td>Khushi Shah</td>
+                                    <td>Administration</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>Medical emergency</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>7</td>
+                                    <td>Vendor Meeting – 07 Mar 2024</td>
+                                    <td>Suresh Kumar</td>
+                                    <td>Quality Assurance</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>8</td>
+                                    <td>Strategy Meeting – 08 Mar 2024</td>
+                                    <td>Priya Verma</td>
+                                    <td>Sales</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>Shared sales strategy</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>9</td>
+                                    <td>Internal Review – 09 Mar 2024</td>
+                                    <td>Arjun Singh</td>
+                                    <td>Procurement</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>Client visit</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>10</td>
+                                    <td>Emergency Meeting – 10 Mar 2024</td>
+                                    <td>Anjali Trivedi</td>
+                                    <td>Management</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>Approved emergency actions</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger action-btn">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+ 
