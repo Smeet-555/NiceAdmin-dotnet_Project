@@ -1,0 +1,159 @@
+@{
+    ViewData["Title"] = "Meeting Form";
+}
+
+<div class="pagetitle">
+    <h1>Meeting</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item">Master</li>
+            <li class="breadcrumb-item active">Meeting</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-calendar-event text-primary me-2"></i>
+                        Meeting Information
+                    </h5>
+
+                    <form class="row g-3">
+                        <div class="col-md-12">
+                            <label for="meetingTitle" class="form-label">Meeting Title</label>
+                            <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title" required>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" rows="3" placeholder="Enter meeting description"></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="meetingDate" class="form-label">Meeting Date</label>
+                            <input type="date" class="form-control" id="meetingDate" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="startTime" class="form-label">Start Time</label>
+                            <input type="time" class="form-control" id="startTime" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="endTime" class="form-label">End Time</label>
+                            <input type="time" class="form-control" id="endTime" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="meetingType" class="form-label">Meeting Type</label>
+                            <select class="form-select" id="meetingType">
+                                <option selected>Select Meeting Type</option>
+                                <option>Team Meeting</option>
+                                <option>Board Meeting</option>
+                                <option>Client Meeting</option>
+                                <option>Training Session</option>
+                                <option>Project Review</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="venue" class="form-label">Venue</label>
+                            <select class="form-select" id="venue">
+                                <option selected>Select Venue</option>
+                                <option>Conference Room A</option>
+                                <option>Conference Room B</option>
+                                <option>Board Room</option>
+                                <option>Training Room</option>
+                                <option>Online Meeting</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="organizer" class="form-label">Organizer</label>
+                            <input type="text" class="form-control" id="organizer" placeholder="Enter organizer name">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status">
+                                <option selected>Scheduled</option>
+                                <option>In Progress</option>
+                                <option>Completed</option>
+                                <option>Cancelled</option>
+                                <option>Postponed</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    Save Meeting
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>
+                                    Reset
+                                </button>
+                                <a href="#" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Meeting Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Meeting Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Meeting title should be descriptive</li>
+                            <li>Ensure start time is before end time</li>
+                            <li>Select appropriate venue for meeting type</li>
+                            <li>Add organizer for better coordination</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-clock text-warning me-2"></i>
+                        Quick Actions
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-people me-1"></i>
+                            Add Participants
+                        </button>
+                        <button type="button" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-calendar-plus me-1"></i>
+                            Schedule Recurring
+                        </button>
+                        <button type="button" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-envelope me-1"></i>
+                            Send Invitations
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
