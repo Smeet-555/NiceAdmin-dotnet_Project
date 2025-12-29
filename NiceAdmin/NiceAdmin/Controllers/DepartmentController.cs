@@ -13,7 +13,7 @@ public class DepartmentController : Controller
     
     public IActionResult DepartmentAddEdit()
     {
-        return View();
+        return View(new Department());
     }
 
     
