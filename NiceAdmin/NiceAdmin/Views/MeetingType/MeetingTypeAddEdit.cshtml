@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Add / Edit Meeting Type";
+
+    /* UI-only flags */
+    bool isEdit = true;   // false = Add, true = Edit
+
+    /* Old values (shown when Edit) */
+    string meetingTypeName = "Board Meeting";
+    string remarks = "Used for board-level discussions";
+}
+
+<div class="pagetitle">
+    <h1>@(isEdit ? "Edit Meeting Type" : "Add Meeting Type")</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">Master</li>
+            <li class="breadcrumb-item active">Meeting Type</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        @(isEdit ? "Edit Meeting Type Details" : "Create New Meeting Type")
+                    </h5>
+
+                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
+                    <form>
+
+                        <!-- Meeting Type Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Meeting Type Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Enter meeting type name"
+                                   value="@(isEdit? meetingTypeName : "")" />
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Remarks <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Short description or purpose"
+                                   value="@(isEdit? remarks : "")" />
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update Meeting Type" : "Save Meeting Type")
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- ===== END FORM ===== -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

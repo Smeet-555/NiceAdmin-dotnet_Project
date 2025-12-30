@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "Add / Edit Staff";
+
+    /* UI-only flags */
+    bool isEdit = true;   // false = Add, true = Edit
+
+    /* Old values (shown when Edit) */
+    string staffName = "John Doe";
+    string department = "IT";
+    string mobileNo = "9876543210";
+    string email = "john.doe@company.com";
+    string remarks = "Senior Software Engineer";
+}
+
+<div class="pagetitle">
+    <h1>@(isEdit ? "Edit Staff" : "Add Staff")</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">Master</li>
+            <li class="breadcrumb-item active">Staff</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-7">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        @(isEdit ? "Edit Staff Details" : "Add New Staff Member")
+                    </h5>
+
+                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
+                    <form class="row g-3">
+
+                        <!-- Staff Name -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Staff Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="50"
+                                   placeholder="Enter staff name"
+                                   value="@(isEdit? staffName : "")" />
+                        </div>
+
+                        <!-- Department -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Department <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Department</option>
+                                <option selected="@(department == "HR")">HR</option>
+                                <option selected="@(department == "Finance")">Finance</option>
+                                <option selected="@(department == "IT")">IT</option>
+                            </select>
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Mobile Number <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="20"
+                                   placeholder="Enter mobile number"
+                                   value="@(isEdit? mobileNo : "")" />
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            <input type="email"
+                                   class="form-control"
+                                   maxlength="50"
+                                   placeholder="Enter email address"
+                                   value="@(isEdit? email : "")" />
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Remarks</label>
+                            <textarea class="form-control"
+                                      rows="2"
+                                      maxlength="250"
+                                      placeholder="Optional remarks">@(
+                                isEdit ? remarks : ""
+                            )</textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-12 text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update Staff" : "Save Staff")
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- ===== END FORM ===== -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,13 +1,27 @@
 @{
-    ViewData["Title"] = "Meeting Form";
+    ViewData["Title"] = "Add / Edit Meeting";
+
+    /* UI-only flags */
+    bool isEdit = true;   // false = Add, true = Edit
+
+    /* Old values (shown only when Edit) */
+    string meetingDate = "2025-02-15T10:30";
+    string department = "IT";
+    string venue = "Conference Room A";
+    string meetingType = "Board Meeting";
+    string description = "Monthly planning discussion";
+    string documentPath = "/docs/meeting-agenda.pdf";
+    bool isCancelled = false;
+    string cancelDate = "";
+    string cancelReason = "";
 }
 
 <div class="pagetitle">
-    <h1>Meeting</h1>
+    <h1>@(isEdit ? "Edit Meeting" : "Add Meeting")</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
             <li class="breadcrumb-item">Master</li>
             <li class="breadcrumb-item active">Meeting</li>
@@ -17,143 +31,139 @@
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-9">
+
             <div class="card">
                 <div class="card-body">
+
                     <h5 class="card-title">
-                        <i class="bi bi-calendar-event text-primary me-2"></i>
-                        Meeting Information
+                        @(isEdit ? "Edit Meeting Details" : "Schedule New Meeting")
                     </h5>
 
+                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
                     <form class="row g-3">
-                        <div class="col-md-12">
-                            <label for="meetingTitle" class="form-label">Meeting Title</label>
-                            <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title" required>
+
+                        <!-- Meeting Date -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                Meeting Date & Time <span class="text-danger">*</span>
+                            </label>
+                            <input type="datetime-local"
+                                   class="form-control"
+                                   value="@(isEdit? meetingDate : "")" />
                         </div>
 
-                        <div class="col-md-12">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" rows="3" placeholder="Enter meeting description"></textarea>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="meetingDate" class="form-label">Meeting Date</label>
-                            <input type="date" class="form-control" id="meetingDate" required>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="startTime" class="form-label">Start Time</label>
-                            <input type="time" class="form-control" id="startTime" required>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="endTime" class="form-label">End Time</label>
-                            <input type="time" class="form-control" id="endTime" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="meetingType" class="form-label">Meeting Type</label>
-                            <select class="form-select" id="meetingType">
-                                <option selected>Select Meeting Type</option>
-                                <option>Team Meeting</option>
-                                <option>Board Meeting</option>
-                                <option>Client Meeting</option>
-                                <option>Training Session</option>
-                                <option>Project Review</option>
+                        <!-- Department -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                Department <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Department</option>
+                                <option selected="@(department == "HR")">HR</option>
+                                <option selected="@(department == "Finance")">Finance</option>
+                                <option selected="@(department == "IT")">IT</option>
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="venue" class="form-label">Venue</label>
-                            <select class="form-select" id="venue">
-                                <option selected>Select Venue</option>
-                                <option>Conference Room A</option>
-                                <option>Conference Room B</option>
-                                <option>Board Room</option>
-                                <option>Training Room</option>
-                                <option>Online Meeting</option>
+                        <!-- Meeting Type -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                Meeting Type <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Type</option>
+                                <option selected="@(meetingType == "Board Meeting")">Board Meeting</option>
+                                <option selected="@(meetingType == "Client Meeting")">Client Meeting</option>
+                                <option selected="@(meetingType == "Training")">Training</option>
                             </select>
                         </div>
 
+                        <!-- Meeting Venue -->
                         <div class="col-md-6">
-                            <label for="organizer" class="form-label">Organizer</label>
-                            <input type="text" class="form-control" id="organizer" placeholder="Enter organizer name">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-select" id="status">
-                                <option selected>Scheduled</option>
-                                <option>In Progress</option>
-                                <option>Completed</option>
-                                <option>Cancelled</option>
-                                <option>Postponed</option>
+                            <label class="form-label fw-bold">
+                                Meeting Venue <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Venue</option>
+                                <option selected="@(venue == "Conference Room A")">Conference Room A</option>
+                                <option selected="@(venue == "Conference Room B")">Conference Room B</option>
                             </select>
                         </div>
 
+                        <!-- Document Upload -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Meeting Document</label>
+
+                            @if (isEdit && !string.IsNullOrEmpty(documentPath))
+                            {
+                                <div class="mb-2">
+                                    <a href="@documentPath" target="_blank" class="text-primary">
+                                        View Existing Document
+                                    </a>
+                                </div>
+                            }
+
+                            <input type="file"
+                                   class="form-control"
+                                   accept=".pdf,.doc,.docx,.xls,.xlsx" />
+                        </div>
+
+                        <!-- Description -->
                         <div class="col-12">
-                            <hr class="my-4">
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-check-lg me-1"></i>
-                                    Save Meeting
-                                </button>
-                                <button type="reset" class="btn btn-secondary">
-                                    <i class="bi bi-arrow-clockwise me-1"></i>
-                                    Reset
-                                </button>
-                                <a href="#" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-left me-1"></i>
-                                    Back to List
-                                </a>
-                            </div>
+                            <label class="form-label fw-bold">Meeting Description</label>
+                            <textarea class="form-control"
+                                      rows="3"
+                                      maxlength="250"
+                                      placeholder="Optional agenda or notes">@(
+                                isEdit ? description : ""
+                            )</textarea>
                         </div>
+
+                        <!-- Is Cancelled -->
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Is Cancelled</label>
+                            <select class="form-select">
+                                <option selected="@(!isCancelled)">No</option>
+                                <option selected="@(isCancelled)">Yes</option>
+                            </select>
+                        </div>
+
+                        <!-- Cancellation Date -->
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">Cancellation Date & Time</label>
+                            <input type="datetime-local"
+                                   class="form-control"
+                                   value="@(isEdit? cancelDate : "")" />
+                        </div>
+
+                        <!-- Cancellation Reason -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Cancellation Reason</label>
+                            <input type="text"
+                                   maxlength="250"
+                                   class="form-control"
+                                   placeholder="Optional reason"
+                                   value="@(isEdit? cancelReason : "")" />
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-12 text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update Meeting" : "Save Meeting")
+                            </button>
+                        </div>
+
                     </form>
-                </div>
-            </div>
-        </div>
+                    <!-- ===== END FORM ===== -->
 
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="bi bi-info-circle text-info me-2"></i>
-                        Meeting Guidelines
-                    </h5>
-                    <div class="alert alert-info">
-                        <h6 class="alert-heading">Meeting Guidelines:</h6>
-                        <ul class="mb-0 small">
-                            <li>Meeting title should be descriptive</li>
-                            <li>Ensure start time is before end time</li>
-                            <li>Select appropriate venue for meeting type</li>
-                            <li>Add organizer for better coordination</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
-            <div class="card mt-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="bi bi-clock text-warning me-2"></i>
-                        Quick Actions
-                    </h5>
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-people me-1"></i>
-                            Add Participants
-                        </button>
-                        <button type="button" class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-calendar-plus me-1"></i>
-                            Schedule Recurring
-                        </button>
-                        <button type="button" class="btn btn-outline-success btn-sm">
-                            <i class="bi bi-envelope me-1"></i>
-                            Send Invitations
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>

@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Add / Edit Meeting Venue";
+
+    /* UI-only flags */
+    bool isEdit = true;   // false = Add, true = Edit
+
+    /* Old value (shown when Edit) */
+    string meetingVenueName = "Block H - Auditorium";
+}
+
+<div class="pagetitle">
+    <h1>@(isEdit ? "Edit Meeting Venue" : "Add Meeting Venue")</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">Master</li>
+            <li class="breadcrumb-item active">Meeting Venue</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        @(isEdit ? "Edit Venue Details" : "Create New Meeting Venue")
+                    </h5>
+
+                    <!-- ===== ONLY USER INPUT FIELD ===== -->
+                    <form>
+
+                        <!-- Meeting Venue Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Meeting Venue Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Enter meeting venue name"
+                                   value="@(isEdit? meetingVenueName : "")" />
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update Meeting Venue" : "Save Meeting Venue")
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- ===== END FORM ===== -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

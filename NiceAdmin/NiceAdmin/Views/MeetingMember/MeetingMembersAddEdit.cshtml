@@ -1,0 +1,110 @@
+@{
+    ViewData["Title"] = "Add / Edit Meeting Member";
+
+    /* UI-only flags */
+    bool isEdit = true;   // false = Add, true = Edit
+
+    /* Old values (shown when Edit) */
+    string selectedMeeting = "Board Meeting - 10 Aug 2025";
+    string selectedStaff = "John Doe";
+    bool isPresent = true;
+    string remarks = "Joined on time";
+}
+
+<div class="pagetitle">
+    <h1>@(isEdit ? "Edit Meeting Member" : "Add Meeting Member")</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">Meetings</li>
+            <li class="breadcrumb-item active">Meeting Member</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-7">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        @(isEdit ? "Edit Attendance Details" : "Assign Member to Meeting")
+                    </h5>
+
+                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
+                    <form class="row g-3">
+
+                        <!-- Meeting -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Meeting <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Meeting</option>
+                                <option selected="@(selectedMeeting == "Board Meeting - 10 Aug 2025")">
+                                    Board Meeting - 10 Aug 2025
+                                </option>
+                                <option selected="@(selectedMeeting == "Department Review - 15 Aug 2025")">
+                                    Department Review - 15 Aug 2025
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Staff -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Staff Member <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option disabled>Select Staff</option>
+                                <option selected="@(selectedStaff == "John Doe")">John Doe</option>
+                                <option selected="@(selectedStaff == "Jane Smith")">Jane Smith</option>
+                            </select>
+                        </div>
+
+                        <!-- Presence -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                Is Present <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select">
+                                <option selected="@(isPresent)">Present</option>
+                                <option selected="@(!isPresent)">Absent</option>
+                            </select>
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Remarks</label>
+                            <textarea class="form-control"
+                                      rows="2"
+                                      maxlength="250"
+                                      placeholder="Optional attendance remarks">@(
+                                isEdit ? remarks : ""
+                            )</textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-12 text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update Member" : "Save Member")
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- ===== END FORM ===== -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

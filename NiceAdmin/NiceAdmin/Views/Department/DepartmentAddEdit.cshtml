@@ -1,13 +1,17 @@
 @{
-    ViewData["Title"] = "Department Form";
+    ViewData["Title"] = "Add / Edit Department";
+
+    /* UI-only flags */
+    bool isEdit = true;                 // false = Add, true = Edit
+    string oldDepartmentName = "HR";    // value shown when Edit
 }
 
 <div class="pagetitle">
-    <h1>Department</h1>
+    <h1>@(isEdit ? "Edit Department" : "Add Department")</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
             <li class="breadcrumb-item">Master</li>
             <li class="breadcrumb-item active">Department</li>
@@ -17,78 +21,45 @@
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
+
             <div class="card">
                 <div class="card-body">
+
                     <h5 class="card-title">
-                        <i class="bi bi-building text-primary me-2"></i>
-                        Department Information
+                        @(isEdit ? "Edit Department" : "Add New Department")
                     </h5>
 
-                    <form class="row g-3">
-                        <div class="col-md-12">
-                            <label for="departmentName" class="form-label">Department Name</label>
-                            <input type="text" class="form-control" id="departmentName" placeholder="Enter department name" required>
+                    <!-- ===== ONLY USER INPUT FIELD ===== -->
+                    <form>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Department Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   maxlength="100"
+                                   placeholder="Enter department name"
+                                   value="@(isEdit? oldDepartmentName : "")" />
                         </div>
 
-                        <div class="col-md-12">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" rows="4" placeholder="Enter department description"></textarea>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2">
+                                Cancel
+                            </button>
+
+                            <button type="button" class="btn btn-primary">
+                                @(isEdit ? "Update" : "Save")
+                            </button>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="createdDate" class="form-label">Created Date</label>
-                            <input type="date" class="form-control" id="createdDate" value="2024-12-29">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-select" id="status">
-                                <option selected>Active</option>
-                                <option>Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <hr class="my-4">
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-check-lg me-1"></i>
-                                    Save Department
-                                </button>
-                                <button type="reset" class="btn btn-secondary">
-                                    <i class="bi bi-arrow-clockwise me-1"></i>
-                                    Reset
-                                </button>
-                                <a href="#" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-left me-1"></i>
-                                    Back to List
-                                </a>
-                            </div>
-                        </div>
                     </form>
-                </div>
-            </div>
-        </div>
+                    <!-- ===== END FORM ===== -->
 
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="bi bi-info-circle text-info me-2"></i>
-                        Guidelines
-                    </h5>
-                    <div class="alert alert-info">
-                        <h6 class="alert-heading">Department Guidelines:</h6>
-                        <ul class="mb-0 small">
-                            <li>Department name should be unique</li>
-                            <li>Use clear and descriptive names</li>
-                            <li>Description helps identify department purpose</li>
-                            <li>Status determines if department is active</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

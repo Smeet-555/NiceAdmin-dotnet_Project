@@ -283,7 +283,7 @@
    */
   const datatables = select('.datatable', true)
   datatables.forEach(datatable => {
-    new simpleDatatables.DataTable(datatable, {
+    const dt = new simpleDatatables.DataTable(datatable, {
       perPageSelect: [5, 10, 15, ["All", -1]],
       columns: [{
           select: 2,
@@ -300,6 +300,14 @@
         }
       ]
     });
+    
+    // Connect custom search input outside the datatable wrapper
+    const searchInput = datatable.closest('.card-body')?.querySelector('.datatable-search .datatable-input');
+    if (searchInput && !searchInput.closest('.datatable-wrapper')) {
+      searchInput.addEventListener('input', function(e) {
+        dt.search(e.target.value);
+      });
+    }
   })
 
   /**
