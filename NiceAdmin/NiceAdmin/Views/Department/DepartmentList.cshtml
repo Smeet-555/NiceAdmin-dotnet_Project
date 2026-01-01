@@ -19,193 +19,53 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card department-card">
+            <div class="card">
                 <div class="card-body">
 
-                    <!-- Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-building text-primary me-1"></i>
-                            Department List
-                        </h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title">Meeting List</h5>
 
-                        <a asp-controller="Department"
-                           asp-action="DepartmentAddEdit"
-                           class="btn btn-primary btn-sm rounded-pill px-3">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Department
+                        <a asp-action="DepartmentList"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg"></i> Add Meeting
                         </a>
                     </div>
 
-                    <!-- Table -->
                     <div class="table-responsive">
-                        <table id="departmentTable"
-                               class="table table-hover align-middle department-table datatable">
+                        <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th style="width:8%">ID</th>
-                                    <th>Department Name</th>
-                                    <th data-type="date" data-format="YYYY-MM-DD">Created</th>
-                                    <th data-type="date" data-format="YYYY-MM-DD">Modified</th>
-                                    <th style="width:15%" class="text-center">Actions</th>
+                                    <th>Date</th>
+                                    <th>Venue</th>
+                                    <th>Meeting Type</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
 
                             <tbody>
+                            @foreach (var meeting in Model)
+                            {
                                 <tr>
-                                    <td>1</td>
-                                    <td>Human Resources</td>
-                                    <td>2024-01-10</td>
-                                    <td>2024-02-01</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn"
-                                           asp-action="DepartmentAddEdit" asp-route-id="1">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                    <td>@meeting.MeetingDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@meeting.MeetingVenueName</td>
+                                    <td>@meeting.MeetingTypeName</td>
+                                    <td>@meeting.DepartmentName</td>
+                                    <td>
+                                        @if (meeting.IsCancelled)
+                                        {
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Scheduled</span>
+                                        }
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>Information Technology</td>
-                                    <td>2024-01-12</td>
-                                    <td>2024-02-05</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>3</td>
-                                    <td>Finance</td>
-                                    <td>2024-01-15</td>
-                                    <td>2024-02-07</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>4</td>
-                                    <td>Marketing</td>
-                                    <td>2024-01-18</td>
-                                    <td>2024-02-10</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>5</td>
-                                    <td>Operations</td>
-                                    <td>2024-01-20</td>
-                                    <td>2024-02-12</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>6</td>
-                                    <td>Administration</td>
-                                    <td>2024-01-22</td>
-                                    <td>2024-02-14</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Research & Development</td>
-                                    <td>2024-01-25</td>
-                                    <td>2024-02-16</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>Customer Support</td>
-                                    <td>2024-01-28</td>
-                                    <td>2024-02-18</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>Sales</td>
-                                    <td>2024-01-30</td>
-                                    <td>2024-02-20</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Quality Assurance</td>
-                                    <td>2024-02-01</td>
-                                    <td>2024-02-22</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
-                    <!-- End Table -->
 
                 </div>
             </div>

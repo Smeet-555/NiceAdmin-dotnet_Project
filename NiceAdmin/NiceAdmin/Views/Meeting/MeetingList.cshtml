@@ -19,215 +19,53 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card department-card">
+            <div class="card">
                 <div class="card-body">
 
-                    <!-- Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-calendar-event text-primary me-1"></i>
-                            Meeting List
-                        </h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title">Meeting List</h5>
 
-                        <a asp-controller="Meeting"
-                           asp-action="MeetingAddEdit"
-                           class="btn btn-primary btn-sm rounded-pill px-3">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Schedule Meeting
+                        <a asp-action="MeetingAddEdit"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg"></i> Add Meeting
                         </a>
                     </div>
 
-                    <!-- Table -->
                     <div class="table-responsive">
-                        <table id="meetingTable"
-                               class="table table-hover align-middle department-table datatable">
+                        <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th style="width:6%">ID</th>
                                     <th>Date</th>
                                     <th>Venue</th>
                                     <th>Meeting Type</th>
                                     <th>Department</th>
                                     <th>Status</th>
-                                    <th style="width:15%" class="text-center">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
+                            @foreach (var meeting in Model)
+                            {
                                 <tr>
-                                    <td>1</td>
-                                    <td>2024-03-01 10:00</td>
-                                    <td>Block A – Room 101</td>
-                                    <td>Board Meeting</td>
-                                    <td>Administration</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a asp-action="MeetingAddEdit" asp-route-id="1"
-                                           class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
+                                    <td>@meeting.MeetingDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@meeting.MeetingVenueName</td>
+                                    <td>@meeting.MeetingTypeName</td>
+                                    <td>@meeting.DepartmentName</td>
+                                    <td>
+                                        @if (meeting.IsCancelled)
+                                        {
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Scheduled</span>
+                                        }
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>2024-03-02 11:30</td>
-                                    <td>Block B – Room 201</td>
-                                    <td>Client Meeting</td>
-                                    <td>Sales</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>3</td>
-                                    <td>2024-03-03 09:00</td>
-                                    <td>Block C – Room 102</td>
-                                    <td>Team Stand-up</td>
-                                    <td>IT</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>4</td>
-                                    <td>2024-03-04 14:00</td>
-                                    <td>Block D – Room 202</td>
-                                    <td>Project Review</td>
-                                    <td>Operations</td>
-                                    <td><span class="badge bg-warning text-dark">Cancelled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>5</td>
-                                    <td>2024-03-05 16:00</td>
-                                    <td>Block E – Auditorium</td>
-                                    <td>Training Session</td>
-                                    <td>HR</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>6</td>
-                                    <td>2024-03-06 10:30</td>
-                                    <td>Block F – Room 301</td>
-                                    <td>Audit Meeting</td>
-                                    <td>Finance</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>2024-03-07 15:00</td>
-                                    <td>Block G – Room 203</td>
-                                    <td>Vendor Meeting</td>
-                                    <td>Procurement</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>2024-03-08 11:00</td>
-                                    <td>Block H – Room 302</td>
-                                    <td>Strategy Meeting</td>
-                                    <td>Management</td>
-                                    <td><span class="badge bg-success">Scheduled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>2024-03-09 13:00</td>
-                                    <td>Block A – Room 102</td>
-                                    <td>Internal Review</td>
-                                    <td>Quality Assurance</td>
-                                    <td><span class="badge bg-warning text-dark">Cancelled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>2024-03-10 17:00</td>
-                                    <td>Block C – Auditorium</td>
-                                    <td>Emergency Meeting</td>
-                                    <td>Administration</td>
-                                    <td><span class="badge bg-danger">Cancelled</span></td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
-                    <!-- End Table -->
 
                 </div>
             </div>

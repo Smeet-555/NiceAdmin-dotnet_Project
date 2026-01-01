@@ -19,184 +19,52 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card department-card">
+            <div class="card">
                 <div class="card-body">
 
-                    <!-- Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-tags text-primary me-1"></i>
-                            Meeting Type List
-                        </h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title">Meeting Type List</h5>
 
-                        <a asp-controller="MeetingType"
-                           asp-action="MeetingTypeAddEdit"
-                           class="btn btn-primary btn-sm rounded-pill px-3">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Meeting Type
+                        <a asp-action="MeetingTypeAddEdit"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg"></i> Add Meeting Type
                         </a>
-                        
                     </div>
 
-                    <!-- Table -->
                     <div class="table-responsive">
-                        <table id="meetingTypeTable"
-                               class="table table-hover align-middle department-table datatable">
+                        <table class="table table-hover align-middle">
                             <thead>
-                                <tr>
-                                    <th style="width:8%">ID</th>
-                                    <th>Meeting Type Name</th>
-                                    <th>Remarks</th>
-                                    <th style="width:15%" class="text-center">Actions</th>
-                                </tr>
+                            <tr>
+                                <th>Meeting Type</th>
+                                <th>Remarks</th>
+                                <th>Action</th>
+                            </tr>
                             </thead>
-
                             <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <td>1</td>
-                                    <td>Board Meeting</td>
-                                    <td>Quarterly board discussions</td>
+                                    <td>@item.MeetingTypeName</td>
+                                    <td>@item.Remarks</td>
                                     <td class="text-center">
-                                        <a asp-action="MeetingTypeAddEdit" asp-route-id="1"
-                                           class="btn btn-sm btn-outline-primary action-btn">
+                                        <a asp-action="MeetingTypeAddEdit"
+                                           asp-route-id="@item.MeetingTypeId"
+                                           class="btn btn-sm btn-warning me-1">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Client Meeting</td>
-                                    <td>Client requirement discussion</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.MeetingTypeId"
+                                           class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
                                         </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
                                     </td>
-                                </tr>
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Team Stand-up</td>
-                                    <td>Daily team sync</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
                                 </tr>
-
-                                <tr>
-                                    <td>4</td>
-                                    <td>Project Review</td>
-                                    <td>Milestone & progress review</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>5</td>
-                                    <td>Training Session</td>
-                                    <td>Internal knowledge sharing</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>6</td>
-                                    <td>Vendor Meeting</td>
-                                    <td>External vendor coordination</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Audit Meeting</td>
-                                    <td>Compliance & audit review</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>Strategy Meeting</td>
-                                    <td>Business planning</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>Internal Review</td>
-                                    <td>Department performance review</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Emergency Meeting</td>
-                                    <td>Urgent decision making</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-sm btn-outline-primary action-btn">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger action-btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
+                            }
                             </tbody>
                         </table>
                     </div>
-                    <!-- End Table -->
 
                 </div>
             </div>
