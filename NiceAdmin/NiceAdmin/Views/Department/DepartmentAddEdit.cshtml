@@ -1,65 +1,95 @@
-@{
-    ViewData["Title"] = "Add / Edit Department";
+@model NiceAdmin.Models.DepartmentViewModel
 
-    /* UI-only flags */
-    bool isEdit = false;                 // false = Add, true = Edit
-    string oldDepartmentName = "HR";    // value shown when Edit
+@{
+    ViewData["Title"] = Model.DepartmentId == 0 ? "Add Department" : "Edit Department";
 }
 
 <div class="pagetitle">
-    <h1>@(isEdit ? "Edit Department" : "Add Department")</h1>
+    <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Department</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Department" asp-action="Index">Departments</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
 </div>
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-6">
-
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-
                     <h5 class="card-title">
-                        @(isEdit ? "Edit Department" : "Add New Department")
+                        <i class="bi bi-building text-primary me-2"></i>
+                        Department Information
                     </h5>
 
-                    <!-- ===== ONLY USER INPUT FIELD ===== -->
-                    <form>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                Department Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control"
-                                   maxlength="100"
-                                   placeholder="Enter department name"
-                                   value="@(isEdit? oldDepartmentName : "")" />
+                    <form asp-controller="Department" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
+                        <input asp-for="DepartmentId" type="hidden" />
+                        <input asp-for="Created" type="hidden" />
+                        
+                        <div class="col-md-12">
+                            <label asp-for="DepartmentName" class="form-label">Department Name *</label>
+                            <input asp-for="DepartmentName" class="form-control" placeholder="Enter department name" required />
+                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid department name (2-100 characters).
+                            </div>
                         </div>
 
-                        <div class="text-end">
-                            <button type="button" class="btn btn-secondary me-2">
-                                Cancel
-                            </button>
-
-                            <button type="button" class="btn btn-primary">
-                                @(isEdit ? "Update" : "Save")
-                            </button>
+                        <div class="col-md-6">
+                            <label class="form-label">Created Date</label>
+                            <input value="@Model.Created.ToString("yyyy-MM-dd")" class="form-control" readonly />
                         </div>
 
+                        <div class="col-md-6">
+                            <label class="form-label">Last Modified</label>
+                            <input value="@(Model.DepartmentId == 0 ? "New Record" : Model.Modified.ToString("yyyy-MM-dd"))" class="form-control" readonly />
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    @(Model.DepartmentId == 0 ? "Create Department" : "Update Department")
+                                </button>
+                                <a asp-controller="Department" asp-action="Index" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
+                        </div>
                     </form>
-                    <!-- ===== END FORM ===== -->
-
                 </div>
             </div>
+        </div>
 
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Department Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Department name should be unique</li>
+                            <li>Use clear and descriptive names</li>
+                            <li>Fields marked with * are required</li>
+                            <li>@(Model.DepartmentId == 0 ? "New department will be created" : "Existing department will be updated")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+}

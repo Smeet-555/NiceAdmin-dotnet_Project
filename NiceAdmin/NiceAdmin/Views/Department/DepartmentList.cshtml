@@ -1,3 +1,5 @@
+@model List<NiceAdmin.Models.DepartmentViewModel>
+
 @{
     ViewData["Title"] = "Department List";
 }
@@ -19,53 +21,83 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card">
+            <!-- Success/Error Messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-1"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="card department-card">
                 <div class="card-body">
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title">Meeting List</h5>
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-building text-primary me-1"></i>
+                            Department List
+                        </h5>
 
-                        <a asp-action="DepartmentList"
-                           class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg"></i> Add Meeting
+                        <a asp-controller="Department"
+                           asp-action="DepartmentAddEdit"
+                           class="btn btn-primary btn-sm rounded-pill px-3">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Department
                         </a>
                     </div>
 
+                    <!-- Table -->
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                        <table id="departmentTable"
+                               class="table table-hover align-middle department-table">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Venue</th>
-                                    <th>Meeting Type</th>
-                                    <th>Department</th>
-                                    <th>Status</th>
+                                    <th style="width:8%">ID</th>
+                                    <th>Department Name</th>
+                                    <th data-type="date" data-format="YYYY-MM-DD">Created</th>
+                                    <th data-type="date" data-format="YYYY-MM-DD">Modified</th>
+                                    <th style="width:15%" class="text-center">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                            @foreach (var meeting in Model)
-                            {
-                                <tr>
-                                    <td>@meeting.MeetingDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@meeting.MeetingVenueName</td>
-                                    <td>@meeting.MeetingTypeName</td>
-                                    <td>@meeting.DepartmentName</td>
-                                    <td>
-                                        @if (meeting.IsCancelled)
-                                        {
-                                            <span class="badge bg-danger">Cancelled</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-success">Scheduled</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
+                                @foreach (var department in Model)
+                                {
+                                    <tr>
+                                        <td>@department.DepartmentId</td>
+                                        <td>@department.DepartmentName</td>
+                                        <td>@department.Created.ToString("yyyy-MM-dd")</td>
+                                        <td>@department.Modified.ToString("yyyy-MM-dd")</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-sm btn-outline-primary action-btn me-1"
+                                               asp-action="DepartmentAddEdit" asp-route-id="@department.DepartmentId"
+                                               title="Edit Department">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger action-btn"
+                                                    onclick="confirmDelete(@department.DepartmentId, '@department.DepartmentName')"
+                                                    title="Delete Department">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
+                    <!-- End Table -->
 
                 </div>
             </div>
@@ -73,3 +105,49 @@
         </div>
     </div>
 </section>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the department <strong id="departmentNameToDelete"></strong>?</p>
+                <p class="text-muted small">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete Department
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function confirmDelete(departmentId, departmentName) {
+
+        document.getElementById('departmentNameToDelete').textContent = departmentName;
+
+
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/Department/Delete/${departmentId}`;
+
+
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
+
+}
