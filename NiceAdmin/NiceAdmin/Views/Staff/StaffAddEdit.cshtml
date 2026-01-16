@@ -1,121 +1,142 @@
+@model NiceAdmin.Models.StaffModelView
+
 @{
-    ViewData["Title"] = "Add / Edit Staff";
-
-    /* UI-only flags */
-    bool isEdit = true;   // false = Add, true = Edit
-
-    /* Old values (shown when Edit) */
-    string staffName = "John Doe";
-    string department = "IT";
-    string mobileNo = "9876543210";
-    string email = "john.doe@company.com";
-    string remarks = "Senior Software Engineer";
+    ViewData["Title"] = Model.StaffId == 0 ? "Add Staff" : "Edit Staff";
+    bool isEdit = Model.StaffId != 0;
 }
 
 <div class="pagetitle">
-    <h1>@(isEdit ? "Edit Staff" : "Add Staff")</h1>
+    <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Staff</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Staff" asp-action="StaffList">Staff</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
 </div>
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-8">
 
             <div class="card">
                 <div class="card-body">
 
                     <h5 class="card-title">
+                        <i class="bi bi-person text-primary me-2"></i>
                         @(isEdit ? "Edit Staff Details" : "Add New Staff Member")
                     </h5>
 
-                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
-                    <form class="row g-3">
+                    <form asp-controller="Staff" asp-action="Save" method="post" class="row g-3">
+                        <input asp-for="StaffId" type="hidden" />
 
                         <!-- Staff Name -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
+                            <label asp-for="StaffName" class="form-label fw-bold">
                                 Staff Name <span class="text-danger">*</span>
                             </label>
-                            <input type="text"
+                            <input asp-for="StaffName" 
+                                   type="text"
                                    class="form-control"
                                    maxlength="50"
                                    placeholder="Enter staff name"
-                                   value="@(isEdit? staffName : "")" />
+                                   required />
+                            <span asp-validation-for="StaffName" class="text-danger"></span>
                         </div>
 
                         <!-- Department -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
+                            <label asp-for="DepartmentName" class="form-label fw-bold">
                                 Department <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select">
-                                <option disabled>Select Department</option>
-                                <option selected="@(department == "HR")">HR</option>
-                                <option selected="@(department == "Finance")">Finance</option>
-                                <option selected="@(department == "IT")">IT</option>
+                            <select asp-for="DepartmentName" class="form-select" required>
+                                <option value="">Select Department</option>
+                                <option value="HR">HR</option>
+                                <option value="Finance">Finance</option>
+                                <option value="IT">IT</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Marketing">Marketing</option>
                             </select>
+                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
                         </div>
 
                         <!-- Mobile Number -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
+                            <label asp-for="MobileNo" class="form-label fw-bold">
                                 Mobile Number <span class="text-danger">*</span>
                             </label>
-                            <input type="text"
+                            <input asp-for="MobileNo"
+                                   type="text"
                                    class="form-control"
                                    maxlength="20"
                                    placeholder="Enter mobile number"
-                                   value="@(isEdit? mobileNo : "")" />
+                                   required />
+                            <span asp-validation-for="MobileNo" class="text-danger"></span>
                         </div>
 
                         <!-- Email Address -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
+                            <label asp-for="EmailAddress" class="form-label fw-bold">
                                 Email Address <span class="text-danger">*</span>
                             </label>
-                            <input type="email"
+                            <input asp-for="EmailAddress"
+                                   type="email"
                                    class="form-control"
                                    maxlength="50"
                                    placeholder="Enter email address"
-                                   value="@(isEdit? email : "")" />
-                        </div>
-
-                        <!-- Remarks -->
-                        <div class="col-12">
-                            <label class="form-label fw-bold">Remarks</label>
-                            <textarea class="form-control"
-                                      rows="2"
-                                      maxlength="250"
-                                      placeholder="Optional remarks">@(
-                                isEdit ? remarks : ""
-                            )</textarea>
+                                   required />
+                            <span asp-validation-for="EmailAddress" class="text-danger"></span>
                         </div>
 
                         <!-- Buttons -->
-                        <div class="col-12 text-end mt-4">
-                            <button type="button" class="btn btn-secondary me-2">
-                                Cancel
-                            </button>
-
-                            <button type="button" class="btn btn-primary">
-                                @(isEdit ? "Update Staff" : "Save Staff")
-                            </button>
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    @(isEdit ? "Update Staff" : "Save Staff")
+                                </button>
+                                <a asp-controller="Staff" asp-action="StaffList" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
                         </div>
 
                     </form>
-                    <!-- ===== END FORM ===== -->
 
                 </div>
             </div>
 
         </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Staff Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>All fields marked with * are required</li>
+                            <li>Email address must be valid</li>
+                            <li>Mobile number should be 10 digits</li>
+                            <li>@(isEdit ? "Update existing staff details" : "Add new staff member to the system")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,7 +1,9 @@
+@model List<NiceAdmin.Models.MeetingMemberViewModel>
+
 @{
     ViewData["Title"] = "Meeting Members";
 }
-@model List<NiceAdmin.Models.MeetingMemberViewModel>
+
 <div class="pagetitle">
     <h1>Meeting Members</h1>
     <nav>
@@ -19,6 +21,25 @@
     <div class="row">
         <div class="col-lg-12">
 
+            <!-- Success/Error Messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-1"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
             <div class="card department-card">
                 <div class="card-body">
 
@@ -30,18 +51,17 @@
                         </h5>
 
                         <a asp-controller="MeetingMember"
-                           asp-action="MeetingMemberAddEdit"
+                           asp-action="MeetingMembersAddEdit"
                            class="btn btn-primary btn-sm rounded-pill px-3">
                             <i class="bi bi-plus-lg me-1"></i>
                             Add Member
                         </a>
-                        
                     </div>
 
                     <!-- Table -->
                     <div class="table-responsive">
                         <table id="meetingMemberTable"
-                               class="table table-hover align-middle department-table datatable">
+                               class="table table-hover align-middle department-table">
                             <thead>
                                 <tr>
                                     <th>Meeting</th>
@@ -60,22 +80,31 @@
                                     <td>@meetingmember.MeetingDescription</td>
                                     <td>@meetingmember.StaffName</td>
                                     <td>@meetingmember.DepartmentName</td>
-                                    <td>@meetingmember.IsPresent</td>
+                                    <td>
+                                        @if (meetingmember.IsPresent)
+                                        {
+                                            <span class="badge bg-success">Present</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Absent</span>
+                                        }
+                                    </td>
                                     <td>@meetingmember.Remarks</td>
                                     <td class="text-center">
-                                        <a asp-action="MeetingMemberAddEdit"
+                                        <a asp-action="MeetingMembersAddEdit"
                                            asp-route-id="@meetingmember.MeetingId"
-                                           class="btn btn-sm btn-warning me-1">
+                                           class="btn btn-sm btn-outline-primary me-1"
+                                           title="Edit Meeting Member">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <a asp-action="Delete"
-                                           asp-route-id="@meetingmember.MeetingId"
-                                           class="btn btn-sm btn-danger">
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                onclick="confirmDelete(@meetingmember.MeetingId, '@meetingmember.StaffName')"
+                                                title="Delete Meeting Member">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
-
                                 </tr>
                             }
                             </tbody>
@@ -89,4 +118,42 @@
         </div>
     </div>
 </section>
- 
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the meeting member <strong id="memberNameToDelete"></strong>?</p>
+                <p class="text-muted small">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete Member
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function confirmDelete(meetingId, memberName) {
+            document.getElementById('memberNameToDelete').textContent = memberName;
+            document.getElementById('deleteForm').action = '@Url.Action("Delete", "MeetingMember")/' + meetingId;
+            
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+    </script>
+}

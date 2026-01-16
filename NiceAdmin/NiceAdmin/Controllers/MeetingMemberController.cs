@@ -43,9 +43,64 @@ public class MeetingMemberController : Controller
         return View("MeetingMembersList", _meetingMembersList);
     }
     
-    public IActionResult MeetingMembersAddEdit()
+    public IActionResult MeetingMembersAddEdit(int? id)
     {
-        return View();
+        if (id.HasValue)
+        {
+            // Edit mode - find the meeting member
+            var meetingMember = _meetingMembersList.FirstOrDefault(mm => mm.MeetingId == id.Value);
+            if (meetingMember == null)
+            {
+                return NotFound();
+            }
+            return View(meetingMember);
+        }
+        else
+        {
+            // Add mode - create new meeting member
+            var newMeetingMember = new MeetingMemberViewModel
+            {
+                MeetingId = 0, // 0 indicates new record
+                IsPresent = false
+            };
+            return View(newMeetingMember);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult Save(MeetingMemberViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            if (model.MeetingId == 0)
+            {
+                // Add new meeting member
+                model.MeetingId = _meetingMembersList.Any() ? _meetingMembersList.Max(mm => mm.MeetingId) + 1 : 1;
+                _meetingMembersList.Add(model);
+                
+                TempData["SuccessMessage"] = "Meeting member added successfully!";
+            }
+            else
+            {
+                // Update existing meeting member
+                var existingMember = _meetingMembersList.FirstOrDefault(mm => mm.MeetingId == model.MeetingId);
+                if (existingMember != null)
+                {
+                    existingMember.MeetingDescription = model.MeetingDescription;
+                    existingMember.StaffName = model.StaffName;
+                    existingMember.DepartmentName = model.DepartmentName;
+                    existingMember.IsPresent = model.IsPresent;
+                    existingMember.Remarks = model.Remarks;
+                    
+                    TempData["SuccessMessage"] = "Meeting member updated successfully!";
+                }
+            }
+            
+            return RedirectToAction("MeetingMembersList");
+        }
+        
+        // If model is not valid, return to form with errors
+        return View("MeetingMembersAddEdit", model);
     }
 
     [HttpPost]

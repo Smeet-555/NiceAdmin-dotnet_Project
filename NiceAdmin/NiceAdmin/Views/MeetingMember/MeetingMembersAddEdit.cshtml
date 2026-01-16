@@ -1,110 +1,152 @@
+@model NiceAdmin.Models.MeetingMemberViewModel
+
 @{
-    ViewData["Title"] = "Add / Edit Meeting Member";
-
-    /* UI-only flags */
-    bool isEdit = true;   // false = Add, true = Edit
-
-    /* Old values (shown when Edit) */
-    string selectedMeeting = "Board Meeting - 10 Aug 2025";
-    string selectedStaff = "John Doe";
-    bool isPresent = true;
-    string remarks = "Joined on time";
+    ViewData["Title"] = Model.MeetingId == 0 ? "Add Meeting Member" : "Edit Meeting Member";
 }
 
 <div class="pagetitle">
-    <h1>@(isEdit ? "Edit Meeting Member" : "Add Meeting Member")</h1>
+    <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item">Meetings</li>
-            <li class="breadcrumb-item active">Meeting Member</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="MeetingMember" asp-action="MeetingMembersList">Meeting Members</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
 </div>
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-7">
-
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-
                     <h5 class="card-title">
-                        @(isEdit ? "Edit Attendance Details" : "Assign Member to Meeting")
+                        <i class="bi bi-person-check text-primary me-2"></i>
+                        Meeting Member Information
                     </h5>
 
-                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
-                    <form class="row g-3">
+                    <form asp-controller="MeetingMember" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
+                        <input asp-for="MeetingId" type="hidden" />
+                        
+                        <div class="col-md-12">
+                            <label asp-for="MeetingDescription" class="form-label">Meeting Description *</label>
+                            <input asp-for="MeetingDescription" class="form-control" placeholder="Enter meeting description" required />
+                            <span asp-validation-for="MeetingDescription" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid meeting description.
+                            </div>
+                        </div>
 
-                        <!-- Meeting -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
-                                Meeting <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select">
-                                <option disabled>Select Meeting</option>
-                                <option selected="@(selectedMeeting == "Board Meeting - 10 Aug 2025")">
-                                    Board Meeting - 10 Aug 2025
-                                </option>
-                                <option selected="@(selectedMeeting == "Department Review - 15 Aug 2025")">
-                                    Department Review - 15 Aug 2025
-                                </option>
+                            <label asp-for="StaffName" class="form-label">Staff Member *</label>
+                            <select asp-for="StaffName" class="form-select" required>
+                                <option value="">Select Staff</option>
+                                <option value="John Doe">John Doe</option>
+                                <option value="Jane Smith">Jane Smith</option>
+                                <option value="Michael Brown">Michael Brown</option>
+                                <option value="Sarah Johnson">Sarah Johnson</option>
+                                <option value="David Wilson">David Wilson</option>
                             </select>
+                            <span asp-validation-for="StaffName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please select a staff member.
+                            </div>
                         </div>
 
-                        <!-- Staff -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">
-                                Staff Member <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select">
-                                <option disabled>Select Staff</option>
-                                <option selected="@(selectedStaff == "John Doe")">John Doe</option>
-                                <option selected="@(selectedStaff == "Jane Smith")">Jane Smith</option>
+                            <label asp-for="DepartmentName" class="form-label">Department *</label>
+                            <select asp-for="DepartmentName" class="form-select" required>
+                                <option value="">Select Department</option>
+                                <option value="IT">IT</option>
+                                <option value="HR">HR</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
                             </select>
+                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please select a department.
+                            </div>
                         </div>
 
-                        <!-- Presence -->
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">
-                                Is Present <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select">
-                                <option selected="@(isPresent)">Present</option>
-                                <option selected="@(!isPresent)">Absent</option>
-                            </select>
+                        <div class="col-md-12">
+                            <label asp-for="Remarks" class="form-label">Remarks</label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" placeholder="Enter remarks (optional)"></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
                         </div>
 
-                        <!-- Remarks -->
-                        <div class="col-md-8">
-                            <label class="form-label fw-bold">Remarks</label>
-                            <textarea class="form-control"
-                                      rows="2"
-                                      maxlength="250"
-                                      placeholder="Optional attendance remarks">@(
-                                isEdit ? remarks : ""
-                            )</textarea>
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input asp-for="IsPresent" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsPresent" class="form-check-label">
+                                    Mark as Present
+                                </label>
+                            </div>
                         </div>
 
-                        <!-- Buttons -->
-                        <div class="col-12 text-end mt-4">
-                            <button type="button" class="btn btn-secondary me-2">
-                                Cancel
-                            </button>
-
-                            <button type="button" class="btn btn-primary">
-                                @(isEdit ? "Update Member" : "Save Member")
-                            </button>
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    @(Model.MeetingId == 0 ? "Create Meeting Member" : "Update Meeting Member")
+                                </button>
+                                <a asp-controller="MeetingMember" asp-action="MeetingMembersList" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
                         </div>
-
                     </form>
-                    <!-- ===== END FORM ===== -->
-
                 </div>
             </div>
+        </div>
 
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Meeting Member Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Meeting description should be clear</li>
+                            <li>Select the staff member attending</li>
+                            <li>Fields marked with * are required</li>
+                            <li>@(Model.MeetingId == 0 ? "New meeting member will be created" : "Existing meeting member will be updated")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

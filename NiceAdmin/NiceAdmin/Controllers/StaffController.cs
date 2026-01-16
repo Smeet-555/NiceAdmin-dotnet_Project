@@ -39,9 +39,62 @@ namespace NiceAdmin.Controllers
             return View(_staffList);
         }
 
-        public IActionResult StaffAddEdit()
+        public IActionResult StaffAddEdit(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                // Edit mode - find the staff member
+                var staff = _staffList.FirstOrDefault(s => s.StaffId == id.Value);
+                if (staff == null)
+                {
+                    return NotFound();
+                }
+                return View(staff);
+            }
+            else
+            {
+                // Add mode - create new staff member
+                var newStaff = new StaffModelView
+                {
+                    StaffId = 0 // 0 indicates new record
+                };
+                return View(newStaff);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Save(StaffModelView model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.StaffId == 0)
+                {
+                    // Add new staff
+                    model.StaffId = _staffList.Any() ? _staffList.Max(s => s.StaffId) + 1 : 1;
+                    _staffList.Add(model);
+                    
+                    TempData["SuccessMessage"] = "Staff member added successfully!";
+                }
+                else
+                {
+                    // Update existing staff
+                    var existingStaff = _staffList.FirstOrDefault(s => s.StaffId == model.StaffId);
+                    if (existingStaff != null)
+                    {
+                        existingStaff.StaffName = model.StaffName;
+                        existingStaff.DepartmentName = model.DepartmentName;
+                        existingStaff.MobileNo = model.MobileNo;
+                        existingStaff.EmailAddress = model.EmailAddress;
+                        
+                        TempData["SuccessMessage"] = "Staff member updated successfully!";
+                    }
+                }
+                
+                return RedirectToAction("StaffList");
+            }
+            
+            // If model is not valid, return to form with errors
+            return View("StaffAddEdit", model);
         }
 
         [HttpPost]

@@ -1,3 +1,5 @@
+@model List<NiceAdmin.Models.StaffModelView>
+
 @{
     ViewData["Title"] = "Staff List";
 }
@@ -19,15 +21,37 @@
     <div class="row">
         <div class="col-lg-12">
 
+            <!-- Success/Error Messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-1"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
             <div class="card">
                 <div class="card-body">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title">Staff Members</h5>
+                        <h5 class="card-title">
+                            <i class="bi bi-people text-primary me-1"></i>
+                            Staff Members
+                        </h5>
 
                         <a asp-action="StaffAddEdit"
-                           class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg"></i> Add Staff
+                           class="btn btn-primary btn-sm rounded-pill px-3">
+                            <i class="bi bi-plus-lg me-1"></i> Add Staff
                         </a>
                     </div>
 
@@ -39,8 +63,7 @@
                                 <th>Department</th>
                                 <th>Mobile</th>
                                 <th>Email</th>
-                                <th>Action</th>
-                                
+                                <th class="text-center">Actions</th>
                             </tr>
                             </thead>
 
@@ -55,17 +78,17 @@
                                     <td class="text-center">
                                         <a asp-action="StaffAddEdit"
                                            asp-route-id="@staff.StaffId"
-                                           class="btn btn-sm btn-warning me-1">
+                                           class="btn btn-sm btn-outline-primary me-1"
+                                           title="Edit Staff">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <a asp-action="Delete"
-                                           asp-route-id="@staff.StaffId"
-                                           class="btn btn-sm btn-danger">
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                onclick="confirmDelete(@staff.StaffId, '@staff.StaffName')"
+                                                title="Delete Staff">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
-
                                 </tr>
                             }
                             </tbody>
@@ -78,3 +101,42 @@
         </div>
     </div>
 </section>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the staff member <strong id="staffNameToDelete"></strong>?</p>
+                <p class="text-muted small">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete Staff
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function confirmDelete(staffId, staffName) {
+            document.getElementById('staffNameToDelete').textContent = staffName;
+            document.getElementById('deleteForm').action = '@Url.Action("Delete", "Staff")/' + staffId;
+            
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+    </script>
+}

@@ -42,9 +42,65 @@ namespace NiceAdmin.Controllers
             return View(_meetings);
         }
 
-        public IActionResult MeetingAddEdit()
+        public IActionResult MeetingAddEdit(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                // Edit mode - find the meeting
+                var meeting = _meetings.FirstOrDefault(m => m.MeetingId == id.Value);
+                if (meeting == null)
+                {
+                    return NotFound();
+                }
+                return View(meeting);
+            }
+            else
+            {
+                // Add mode - create new meeting
+                var newMeeting = new MeetingViewModel
+                {
+                    MeetingId = 0, // 0 indicates new record
+                    MeetingDate = DateTime.Today,
+                    IsCancelled = false
+                };
+                return View(newMeeting);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Save(MeetingViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.MeetingId == 0)
+                {
+                    // Add new meeting
+                    model.MeetingId = _meetings.Any() ? _meetings.Max(m => m.MeetingId) + 1 : 1;
+                    _meetings.Add(model);
+                    
+                    TempData["SuccessMessage"] = "Meeting added successfully!";
+                }
+                else
+                {
+                    // Update existing meeting
+                    var existingMeeting = _meetings.FirstOrDefault(m => m.MeetingId == model.MeetingId);
+                    if (existingMeeting != null)
+                    {
+                        existingMeeting.MeetingDate = model.MeetingDate;
+                        existingMeeting.MeetingVenueName = model.MeetingVenueName;
+                        existingMeeting.MeetingTypeName = model.MeetingTypeName;
+                        existingMeeting.DepartmentName = model.DepartmentName;
+                        existingMeeting.IsCancelled = model.IsCancelled;
+                        
+                        TempData["SuccessMessage"] = "Meeting updated successfully!";
+                    }
+                }
+                
+                return RedirectToAction("MeetingList");
+            }
+            
+            // If model is not valid, return to form with errors
+            return View("MeetingAddEdit", model);
         }
 
         [HttpPost]
