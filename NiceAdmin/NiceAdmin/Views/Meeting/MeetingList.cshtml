@@ -74,7 +74,7 @@
                             @foreach (var meeting in Model)
                             {
                                 <tr>
-                                    <td>@meeting.MeetingId</td>
+                                    @* <td>@meeting.MeetingId</td> *@
                                     <td>@meeting.MeetingDate.ToString("yyyy-MM-dd")</td>
                                     <td>@meeting.MeetingVenueName</td>
                                     <td>@meeting.MeetingTypeName</td>

@@ -60,10 +60,7 @@
                         <table class="table table-hover align-middle">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Venue Name</th>
-                                <th>Created</th>
-                                <th>Modified</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
@@ -72,10 +69,7 @@
                             @foreach (var venue in Model)
                             {
                                 <tr>
-                                    <td>@venue.VenueId</td>
                                     <td>@venue.VenueName</td>
-                                    <td>@venue.Created.ToString("yyyy-MM-dd")</td>
-                                    <td>@venue.Modified.ToString("yyyy-MM-dd")</td>
                                     <td class="text-center">
                                         <a asp-action="MeetingVenueAddEdit"
                                            asp-route-id="@venue.VenueId"

@@ -64,7 +64,7 @@
                                class="table table-hover align-middle department-table">
                             <thead>
                                 <tr>
-                                    <th style="width:8%">ID</th>
+                                    @* <th style="width:8%">ID</th> *@
                                     <th>Department Name</th>
                                     <th data-type="date" data-format="YYYY-MM-DD">Created</th>
                                     <th data-type="date" data-format="YYYY-MM-DD">Modified</th>
@@ -76,7 +76,7 @@
                                 @foreach (var department in Model)
                                 {
                                     <tr>
-                                        <td>@department.DepartmentId</td>
+                                        @* <td>@department.DepartmentId</td> *@
                                         <td>@department.DepartmentName</td>
                                         <td>@department.Created.ToString("yyyy-MM-dd")</td>
                                         <td>@department.Modified.ToString("yyyy-MM-dd")</td>

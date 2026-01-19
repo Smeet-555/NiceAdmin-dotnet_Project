@@ -1,82 +1,113 @@
+@model NiceAdmin.Models.MeetingTypeViewModel
+
 @{
-    ViewData["Title"] = "Add / Edit Meeting Type";
-
-    /* UI-only flags */
-    bool isEdit = true;   // false = Add, true = Edit
-
-    /* Old values (shown when Edit) */
-    string meetingTypeName = "Board Meeting";
-    string remarks = "Used for board-level discussions";
+    ViewData["Title"] = Model.MeetingTypeId == 0 ? "Add Meeting Type" : "Edit Meeting Type";
 }
 
 <div class="pagetitle">
-    <h1>@(isEdit ? "Edit Meeting Type" : "Add Meeting Type")</h1>
+    <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Meeting Type</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="MeetingType" asp-action="MeetingTypeList">Meeting Types</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
 </div>
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-6">
-
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-
                     <h5 class="card-title">
-                        @(isEdit ? "Edit Meeting Type Details" : "Create New Meeting Type")
+                        <i class="bi bi-calendar-check text-primary me-2"></i>
+                        Meeting Type Information
                     </h5>
 
-                    <!-- ===== ONLY USER INPUT FIELDS ===== -->
-                    <form>
-
-                        <!-- Meeting Type Name -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                Meeting Type Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control"
-                                   maxlength="100"
-                                   placeholder="Enter meeting type name"
-                                   value="@(isEdit? meetingTypeName : "")" />
+                    <form asp-controller="MeetingType" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
+                        <input asp-for="MeetingTypeId" type="hidden" />
+                        
+                        <div class="col-md-12">
+                            <label asp-for="MeetingTypeName" class="form-label">Meeting Type Name *</label>
+                            <input asp-for="MeetingTypeName" class="form-control" placeholder="Enter meeting type name" required />
+                            <span asp-validation-for="MeetingTypeName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid meeting type name.
+                            </div>
                         </div>
 
-                        <!-- Remarks -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                Remarks <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control"
-                                   maxlength="100"
-                                   placeholder="Short description or purpose"
-                                   value="@(isEdit? remarks : "")" />
+                        <div class="col-md-12">
+                            <label asp-for="Remarks" class="form-label">Remarks *</label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" placeholder="Enter remarks or description" required></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide remarks for this meeting type.
+                            </div>
                         </div>
 
-                        <!-- Buttons -->
-                        <div class="text-end mt-4">
-                            <button type="button" class="btn btn-secondary me-2">
-                                Cancel
-                            </button>
-
-                            <button type="button" class="btn btn-primary">
-                                @(isEdit ? "Update Meeting Type" : "Save Meeting Type")
-                            </button>
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    @(Model.MeetingTypeId == 0 ? "Create Meeting Type" : "Update Meeting Type")
+                                </button>
+                                <a asp-controller="MeetingType" asp-action="MeetingTypeList" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
                         </div>
-
                     </form>
-                    <!-- ===== END FORM ===== -->
-
                 </div>
             </div>
+        </div>
 
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Meeting Type Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Meeting type name should be unique</li>
+                            <li>Use clear and descriptive names</li>
+                            <li>Fields marked with * are required</li>
+                            <li>@(Model.MeetingTypeId == 0 ? "New meeting type will be created" : "Existing meeting type will be updated")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+ {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

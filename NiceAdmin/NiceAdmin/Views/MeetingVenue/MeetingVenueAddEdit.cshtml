@@ -1,69 +1,104 @@
+@model NiceAdmin.Models.MeetingVenueViewModel
+
 @{
-    ViewData["Title"] = "Add / Edit Meeting Venue";
-
-    /* UI-only flags */
-    bool isEdit = true;   // false = Add, true = Edit
-
-    /* Old value (shown when Edit) */
-    string meetingVenueName = "Block H - Auditorium";
+    ViewData["Title"] = Model.VenueId == 0 ? "Add Meeting Venue" : "Edit Meeting Venue";
 }
 
 <div class="pagetitle">
-    <h1>@(isEdit ? "Edit Meeting Venue" : "Add Meeting Venue")</h1>
+    <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Meeting Venue</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="MeetingVenue" asp-action="MeetingVenueList">Meeting Venues</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
 </div>
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-6">
-
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-
                     <h5 class="card-title">
-                        @(isEdit ? "Edit Venue Details" : "Create New Meeting Venue")
+                        <i class="bi bi-geo-alt text-primary me-2"></i>
+                        Meeting Venue Information
                     </h5>
 
-                    <!-- ===== ONLY USER INPUT FIELD ===== -->
-                    <form>
-
-                        <!-- Meeting Venue Name -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                Meeting Venue Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control"
-                                   maxlength="100"
-                                   placeholder="Enter meeting venue name"
-                                   value="@(isEdit? meetingVenueName : "")" />
+                    <form asp-controller="MeetingVenue" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
+                        <input asp-for="VenueId" type="hidden" />
+                        
+                        <div class="col-md-12">
+                            <label asp-for="VenueName" class="form-label">Venue Name *</label>
+                            <input asp-for="VenueName" class="form-control" placeholder="Enter venue name" required />
+                            <span asp-validation-for="VenueName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid venue name (2-150 characters).
+                            </div>
                         </div>
 
-                        <!-- Buttons -->
-                        <div class="text-end mt-4">
-                            <button type="button" class="btn btn-secondary me-2">
-                                Cancel
-                            </button>
-
-                            <button type="button" class="btn btn-primary">
-                                @(isEdit ? "Update Meeting Venue" : "Save Meeting Venue")
-                            </button>
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i>
+                                    @(Model.VenueId == 0 ? "Create Meeting Venue" : "Update Meeting Venue")
+                                </button>
+                                <a asp-controller="MeetingVenue" asp-action="MeetingVenueList" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to List
+                                </a>
+                            </div>
                         </div>
-
                     </form>
-                    <!-- ===== END FORM ===== -->
-
                 </div>
             </div>
+        </div>
 
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle text-info me-2"></i>
+                        Guidelines
+                    </h5>
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">Meeting Venue Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Venue name should be unique</li>
+                            <li>Use clear and descriptive names</li>
+                            <li>Fields marked with * are required</li>
+                            <li>@(Model.VenueId == 0 ? "New meeting venue will be created" : "Existing meeting venue will be updated")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

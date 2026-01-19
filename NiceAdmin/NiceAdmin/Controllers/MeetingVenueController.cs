@@ -36,9 +36,61 @@ namespace NiceAdmin.Controllers
             return View(_venues);
         }
 
-        public IActionResult MeetingVenueAddEdit()
+        public IActionResult MeetingVenueAddEdit(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                // Edit mode - find the venue
+                var venue = _venues.FirstOrDefault(v => v.VenueId == id.Value);
+                if (venue == null)
+                {
+                    return NotFound();
+                }
+                return View(venue);
+            }
+            else
+            {
+                // Add mode - create new venue
+                var newVenue = new MeetingVenueViewModel
+                {
+                    VenueId = 0 // 0 indicates new record
+                };
+                return View(newVenue);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Save(MeetingVenueViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.VenueId == 0)
+                {
+                    // Add new venue
+                    model.VenueId = _venues.Any() ? _venues.Max(v => v.VenueId) + 1 : 1;
+                    // Created and Modified will be handled by database
+                    _venues.Add(model);
+                    
+                    TempData["SuccessMessage"] = "Meeting venue added successfully!";
+                }
+                else
+                {
+                    // Update existing venue
+                    var existingVenue = _venues.FirstOrDefault(v => v.VenueId == model.VenueId);
+                    if (existingVenue != null)
+                    {
+                        existingVenue.VenueName = model.VenueName;
+                        // Modified will be handled by database
+                        
+                        TempData["SuccessMessage"] = "Meeting venue updated successfully!";
+                    }
+                }
+                
+                return RedirectToAction("MeetingVenueList");
+            }
+            
+            // If model is not valid, return to form with errors
+            return View("MeetingVenueAddEdit", model);
         }
 
         [HttpPost]

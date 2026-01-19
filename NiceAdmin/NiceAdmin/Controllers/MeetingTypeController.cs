@@ -33,9 +33,60 @@ namespace NiceAdmin.Controllers
             return View(_meetingTypes);
         }
 
-        public IActionResult MeetingTypeAddEdit()
+        public IActionResult MeetingTypeAddEdit(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                // Edit mode - find the meeting type
+                var meetingType = _meetingTypes.FirstOrDefault(mt => mt.MeetingTypeId == id.Value);
+                if (meetingType == null)
+                {
+                    return NotFound();
+                }
+                return View(meetingType);
+            }
+            else
+            {
+                // Add mode - create new meeting type
+                var newMeetingType = new MeetingTypeViewModel
+                {
+                    MeetingTypeId = 0 // 0 indicates new record
+                };
+                return View(newMeetingType);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Save(MeetingTypeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.MeetingTypeId == 0)
+                {
+                    // Add new meeting type
+                    model.MeetingTypeId = _meetingTypes.Any() ? _meetingTypes.Max(mt => mt.MeetingTypeId) + 1 : 1;
+                    _meetingTypes.Add(model);
+                    
+                    TempData["SuccessMessage"] = "Meeting type added successfully!";
+                }
+                else
+                {
+                    // Update existing meeting type
+                    var existingMeetingType = _meetingTypes.FirstOrDefault(mt => mt.MeetingTypeId == model.MeetingTypeId);
+                    if (existingMeetingType != null)
+                    {
+                        existingMeetingType.MeetingTypeName = model.MeetingTypeName;
+                        existingMeetingType.Remarks = model.Remarks;
+                        
+                        TempData["SuccessMessage"] = "Meeting type updated successfully!";
+                    }
+                }
+                
+                return RedirectToAction("MeetingTypeList");
+            }
+            
+            // If model is not valid, return to form with errors
+            return View("MeetingTypeAddEdit", model);
         }
 
         [HttpPost]
