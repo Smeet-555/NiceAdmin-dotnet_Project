@@ -1,642 +1,581 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-
-    <div class="pagetitle">
-        <h1>Dashboard</h1>
-        <nav>
+<div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="breadcrumb-item active">Department</li>
+            <li class="breadcrumb-item active">Dashboard</li>
         </ol>
+    </nav>
+</div><!-- End Page Title -->
 
-        </nav>
-    </div><!-- End Page Title -->
+<section class="section dashboard">
+    <div class="row">
 
-    <section class="section dashboard">
-        <div class="row">
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+            <div class="row">
 
-            <!-- Left side columns -->
-            <div class="col-lg-8">
-                <div class="row">
+                <!-- Total Meetings Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card sales-card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
 
-                    <!-- Sales Card -->
-                    <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Meetings <span>| Today</span></h5>
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-cart"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>145</h6>
-                                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>12</h6>
+                                    <span class="text-success small pt-1 fw-bold">8%</span> 
+                                    <span class="text-muted small pt-2 ps-1">increase</span>
                                 </div>
                             </div>
-
                         </div>
-                    </div><!-- End Sales Card -->
-                    <!-- Revenue Card -->
-                    <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card revenue-card">
+                    </div>
+                </div><!-- End Total Meetings Card -->
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
+                <!-- Active Staff Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card revenue-card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Active Staff <span>| This Month</span></h5>
 
-                            <div class="card-body">
-                                <h5 class="card-title">Revenue <span>| This Month</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-currency-dollar"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>$3,264</h6>
-                                        <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>156</h6>
+                                    <span class="text-success small pt-1 fw-bold">5%</span> 
+                                    <span class="text-muted small pt-2 ps-1">increase</span>
                                 </div>
                             </div>
-
                         </div>
-                    </div><!-- End Revenue Card -->
-                    <!-- Customers Card -->
-                    <div class="col-xxl-4 col-xl-12">
+                    </div>
+                </div><!-- End Active Staff Card -->
 
-                        <div class="card info-card customers-card">
+                <!-- Departments Card -->
+                <div class="col-xxl-4 col-xl-12">
+                    <div class="card info-card customers-card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
+                        <div class="card-body">
+                            <h5 class="card-title">Departments <span>| Total</span></h5>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>1244</h6>
-                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building"></i>
                                 </div>
-
+                                <div class="ps-3">
+                                    <h6>8</h6>
+                                    <span class="text-success small pt-1 fw-bold">2</span> 
+                                    <span class="text-muted small pt-2 ps-1">new this month</span>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div><!-- End Departments Card -->
 
-                    </div><!-- End Customers Card -->
-                    <!-- Reports -->
-                    <div class="col-12">
-                        <div class="card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                                <!-- Line Chart -->
-                                <div id="reportsChart"></div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                      new ApexCharts(document.querySelector("#reportsChart"), {
-                                        series: [{
-                                          name: 'Sales',
-                                          data: [31, 40, 28, 51, 42, 82, 56],
-                                        }, {
-                                          name: 'Revenue',
-                                          data: [11, 32, 45, 32, 34, 52, 41]
-                                        }, {
-                                          name: 'Customers',
-                                          data: [15, 11, 32, 18, 9, 24, 11]
-                                        }],
-                                        chart: {
-                                          height: 350,
-                                          type: 'area',
-                                          toolbar: {
-                                            show: false
-                                          },
-                                        },
-                                        markers: {
-                                          size: 4
-                                        },
-                                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                        fill: {
-                                          type: "gradient",
-                                          gradient: {
-                                            shadeIntensity: 1,
-                                            opacityFrom: 0.3,
-                                            opacityTo: 0.4,
-                                            stops: [0, 90, 100]
-                                          }
-                                        },
-                                        dataLabels: {
-                                          enabled: false
-                                        },
-                                        stroke: {
-                                          curve: 'smooth',
-                                          width: 2
-                                        },
-                                        xaxis: {
-                                          type: 'datetime',
-                                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                        },
-                                        tooltip: {
-                                          x: {
-                                            format: 'dd/MM/yy HH:mm'
-                                          },
-                                        }
-                                      }).render();
-                                    });
-                                </script>
-                                <!-- End Line Chart -->
-
-                            </div>
-
+                <!-- Meeting Analytics -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
                         </div>
-                    </div><!-- End Reports -->
-                    <!-- Recent Sales -->
-                    <div class="col-12">
-                        <div class="card recent-sales overflow-auto">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
+                        <div class="card-body">
+                            <h5 class="card-title">Meeting Analytics <span>/This Week</span></h5>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
+                            <!-- Line Chart -->
+                            <div id="reportsChart"></div>
 
-                            <div class="card-body">
-                                <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                                <table class="table table-borderless datatable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Customer</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row"><a href="#">#2457</a></th>
-                                            <td>Brandon Jacob</td>
-                                            <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                                            <td>$64</td>
-                                            <td><span class="badge bg-success">Approved</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#">#2147</a></th>
-                                            <td>Bridie Kessler</td>
-                                            <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                            <td>$47</td>
-                                            <td><span class="badge bg-warning">Pending</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#">#2049</a></th>
-                                            <td>Ashleigh Langosh</td>
-                                            <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                                            <td>$147</td>
-                                            <td><span class="badge bg-success">Approved</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#">#2644</a></th>
-                                            <td>Angus Grady</td>
-                                            <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                                            <td>$67</td>
-                                            <td><span class="badge bg-danger">Rejected</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#">#2644</a></th>
-                                            <td>Raheem Lehner</td>
-                                            <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                                            <td>$165</td>
-                                            <td><span class="badge bg-success">Approved</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                  new ApexCharts(document.querySelector("#reportsChart"), {
+                                    series: [{
+                                      name: 'Scheduled Meetings',
+                                      data: [8, 12, 15, 18, 22, 25, 28],
+                                    }, {
+                                      name: 'Completed Meetings',
+                                      data: [6, 10, 12, 16, 20, 22, 24]
+                                    }, {
+                                      name: 'Cancelled Meetings',
+                                      data: [2, 2, 3, 2, 2, 3, 4]
+                                    }],
+                                    chart: {
+                                      height: 350,
+                                      type: 'area',
+                                      toolbar: {
+                                        show: false
+                                      },
+                                    },
+                                    markers: {
+                                      size: 4
+                                    },
+                                    colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                    fill: {
+                                      type: "gradient",
+                                      gradient: {
+                                        shadeIntensity: 1,
+                                        opacityFrom: 0.3,
+                                        opacityTo: 0.4,
+                                        stops: [0, 90, 100]
+                                      }
+                                    },
+                                    dataLabels: {
+                                      enabled: false
+                                    },
+                                    stroke: {
+                                      curve: 'smooth',
+                                      width: 2
+                                    },
+                                    xaxis: {
+                                      type: 'datetime',
+                                      categories: ["2024-01-15T00:00:00.000Z", "2024-01-16T00:00:00.000Z", "2024-01-17T00:00:00.000Z", "2024-01-18T00:00:00.000Z", "2024-01-19T00:00:00.000Z", "2024-01-20T00:00:00.000Z", "2024-01-21T00:00:00.000Z"]
+                                    },
+                                    tooltip: {
+                                      x: {
+                                        format: 'dd/MM/yy'
+                                      },
+                                    }
+                                  }).render();
+                                });
+                            </script>
+                            <!-- End Line Chart -->
                         </div>
-                    </div><!-- End Recent Sales -->
-                    <!-- Top Selling -->
-                    <div class="col-12">
-                        <div class="card top-selling overflow-auto">
+                    </div>
+                </div><!-- End Meeting Analytics -->
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body pb-0">
-                                <h5 class="card-title">Top Selling <span>| Today</span></h5>
-
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Preview</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Sold</th>
-                                            <th scope="col">Revenue</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                                            <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
-                                            <td>$64</td>
-                                            <td class="fw-bold">124</td>
-                                            <td>$5,828</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                                            <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
-                                            <td>$46</td>
-                                            <td class="fw-bold">98</td>
-                                            <td>$4,508</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                                            <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
-                                            <td>$59</td>
-                                            <td class="fw-bold">74</td>
-                                            <td>$4,366</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
-                                            <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                                            <td>$32</td>
-                                            <td class="fw-bold">63</td>
-                                            <td>$2,016</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
-                                            <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                                            <td>$79</td>
-                                            <td class="fw-bold">41</td>
-                                            <td>$3,239</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-
+                <!-- Recent Meetings -->
+                <div class="col-12">
+                    <div class="card recent-sales overflow-auto">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
                         </div>
-                    </div><!-- End Top Selling -->
 
+                        <div class="card-body">
+                            <h5 class="card-title">Recent Meetings <span>| Today</span></h5>
+
+                            <table class="table table-borderless datatable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Meeting</th>
+                                        <th scope="col">Department</th>
+                                        <th scope="col">Venue</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><a href="#">#M001</a></th>
+                                        <td>Project Review Meeting</td>
+                                        <td>IT</td>
+                                        <td>Conference Room A</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><a href="#">#M002</a></th>
+                                        <td>Monthly Team Sync</td>
+                                        <td>HR</td>
+                                        <td>Main Hall</td>
+                                        <td><span class="badge bg-warning">In Progress</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><a href="#">#M003</a></th>
+                                        <td>Budget Planning</td>
+                                        <td>Finance</td>
+                                        <td>Board Room</td>
+                                        <td><span class="badge bg-primary">Scheduled</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><a href="#">#M004</a></th>
+                                        <td>Training Session</td>
+                                        <td>Operations</td>
+                                        <td>Training Room</td>
+                                        <td><span class="badge bg-danger">Cancelled</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><a href="#">#M005</a></th>
+                                        <td>Client Presentation</td>
+                                        <td>Sales</td>
+                                        <td>Conference Room B</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!-- End Recent Meetings -->
+
+                <!-- Meeting Types Overview -->
+                <div class="col-12">
+                    <div class="card top-selling overflow-auto">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body pb-0">
+                            <h5 class="card-title">Popular Meeting Types <span>| This Month</span></h5>
+
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Department</th>
+                                        <th scope="col">Count</th>
+                                        <th scope="col">Avg Duration</th>
+                                        <th scope="col">Success Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="bi bi-calendar-check text-primary me-2"></i>Project Meeting</td>
+                                        <td>IT</td>
+                                        <td class="fw-bold">24</td>
+                                        <td>2h 30m</td>
+                                        <td><span class="text-success">95%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-people text-info me-2"></i>Team Sync</td>
+                                        <td>All</td>
+                                        <td class="fw-bold">18</td>
+                                        <td>1h 15m</td>
+                                        <td><span class="text-success">92%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-graph-up text-success me-2"></i>Management Review</td>
+                                        <td>Management</td>
+                                        <td class="fw-bold">12</td>
+                                        <td>3h 00m</td>
+                                        <td><span class="text-success">88%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-mortarboard text-warning me-2"></i>Training Session</td>
+                                        <td>HR</td>
+                                        <td class="fw-bold">8</td>
+                                        <td>4h 00m</td>
+                                        <td><span class="text-warning">75%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="bi bi-handshake text-primary me-2"></i>Client Meeting</td>
+                                        <td>Sales</td>
+                                        <td class="fw-bold">15</td>
+                                        <td>1h 45m</td>
+                                        <td><span class="text-success">90%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!-- End Meeting Types Overview -->
+
+            </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
                 </div>
-            </div><!-- End Left side columns -->
-            <!-- Right side columns -->
-            <div class="col-lg-4">
 
-                <!-- Recent Activity -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activity <span>| Today</span></h5>
 
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body">
-                        <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-                        <div class="activity">
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">32 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                <div class="activity-content">
-                                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">56 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                <div class="activity-content">
-                                    Voluptatem blanditiis blanditiis eveniet
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">2 hrs</div>
-                                <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                <div class="activity-content">
-                                    Voluptates corrupti molestias voluptatem
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">1 day</div>
-                                <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                <div class="activity-content">
-                                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">2 days</div>
-                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                <div class="activity-content">
-                                    Est sit eum reiciendis exercitationem
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">4 weeks</div>
-                                <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                <div class="activity-content">
-                                    Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-                                </div>
-                            </div><!-- End activity item-->
-
+                    <div class="activity">
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">15 min</div>
+                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                            <div class="activity-content">
+                                <strong>Project Review Meeting</strong> completed successfully in Conference Room A
+                            </div>
                         </div>
 
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">32 min</div>
+                            <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                            <div class="activity-content">
+                                New staff member <strong>John Doe</strong> added to IT Department
+                            </div>
+                        </div>
+
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">1 hr</div>
+                            <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                            <div class="activity-content">
+                                <strong>Training Session</strong> rescheduled to next week
+                            </div>
+                        </div>
+
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">2 hrs</div>
+                            <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                            <div class="activity-content">
+                                New meeting venue <strong>Conference Room C</strong> added
+                            </div>
+                        </div>
+
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">3 hrs</div>
+                            <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                            <div class="activity-content">
+                                <strong>Budget Meeting</strong> cancelled due to unavailability
+                            </div>
+                        </div>
+
+                        <div class="activity-item d-flex">
+                            <div class="activite-label">1 day</div>
+                            <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                            <div class="activity-content">
+                                Monthly department reports submitted by all teams
+                            </div>
+                        </div>
                     </div>
-                </div><!-- End Recent Activity -->
-                <!-- Budget Report -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
+                </div>
+            </div><!-- End Recent Activity -->
 
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
+            <!-- Department Overview -->
+            <div class="card">
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
+                </div>
 
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Budget Report <span>| This Month</span></h5>
+                <div class="card-body pb-0">
+                    <h5 class="card-title">Department Activity <span>| This Month</span></h5>
 
-                        <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+                    <div id="departmentChart" style="min-height: 400px;" class="echart"></div>
 
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                              var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                                legend: {
-                                  data: ['Allocated Budget', 'Actual Spending']
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          var departmentChart = echarts.init(document.querySelector("#departmentChart")).setOption({
+                            legend: {
+                              data: ['Meetings Held', 'Staff Participation']
+                            },
+                            radar: {
+                              indicator: [{
+                                  name: 'IT',
+                                  max: 50
                                 },
-                                radar: {
-                                  // shape: 'circle',
-                                  indicator: [{
-                                      name: 'Sales',
-                                      max: 6500
-                                    },
-                                    {
-                                      name: 'Administration',
-                                      max: 16000
-                                    },
-                                    {
-                                      name: 'Information Technology',
-                                      max: 30000
-                                    },
-                                    {
-                                      name: 'Customer Support',
-                                      max: 38000
-                                    },
-                                    {
-                                      name: 'Development',
-                                      max: 52000
-                                    },
-                                    {
-                                      name: 'Marketing',
-                                      max: 25000
-                                    }
-                                  ]
+                                {
+                                  name: 'HR',
+                                  max: 40
                                 },
-                                series: [{
-                                  name: 'Budget vs spending',
-                                  type: 'radar',
-                                  data: [{
-                                      value: [4200, 3000, 20000, 35000, 50000, 18000],
-                                      name: 'Allocated Budget'
-                                    },
-                                    {
-                                      value: [5000, 14000, 28000, 26000, 42000, 21000],
-                                      name: 'Actual Spending'
-                                    }
-                                  ]
-                                }]
-                              });
-                            });
-                        </script>
-
-                    </div>
-                </div><!-- End Budget Report -->
-                <!-- Website Traffic -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                              echarts.init(document.querySelector("#trafficChart")).setOption({
-                                tooltip: {
-                                  trigger: 'item'
+                                {
+                                  name: 'Finance',
+                                  max: 35
                                 },
-                                legend: {
-                                  top: '5%',
-                                  left: 'center'
+                                {
+                                  name: 'Operations',
+                                  max: 30
                                 },
-                                series: [{
-                                  name: 'Access From',
-                                  type: 'pie',
-                                  radius: ['40%', '70%'],
-                                  avoidLabelOverlap: false,
-                                  label: {
-                                    show: false,
-                                    position: 'center'
-                                  },
-                                  emphasis: {
-                                    label: {
-                                      show: true,
-                                      fontSize: '18',
-                                      fontWeight: 'bold'
-                                    }
-                                  },
-                                  labelLine: {
-                                    show: false
-                                  },
-                                  data: [{
-                                      value: 1048,
-                                      name: 'Search Engine'
-                                    },
-                                    {
-                                      value: 735,
-                                      name: 'Direct'
-                                    },
-                                    {
-                                      value: 580,
-                                      name: 'Email'
-                                    },
-                                    {
-                                      value: 484,
-                                      name: 'Union Ads'
-                                    },
-                                    {
-                                      value: 300,
-                                      name: 'Video Ads'
-                                    }
-                                  ]
-                                }]
-                              });
-                            });
-                        </script>
+                                {
+                                  name: 'Marketing',
+                                  max: 25
+                                },
+                                {
+                                  name: 'Sales',
+                                  max: 45
+                                }
+                              ]
+                            },
+                            series: [{
+                              name: 'Department Activity',
+                              type: 'radar',
+                              data: [{
+                                  value: [42, 32, 28, 25, 20, 38],
+                                  name: 'Meetings Held'
+                                },
+                                {
+                                  value: [38, 35, 30, 22, 18, 40],
+                                  name: 'Staff Participation'
+                                }
+                              ]
+                            }]
+                          });
+                        });
+                    </script>
+                </div>
+            </div><!-- End Department Overview -->
 
+            <!-- Meeting Status Distribution -->
+            <div class="card">
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                    <h5 class="card-title">Meeting Status <span>| This Month</span></h5>
+
+                    <div id="statusChart" style="min-height: 400px;" class="echart"></div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          echarts.init(document.querySelector("#statusChart")).setOption({
+                            tooltip: {
+                              trigger: 'item'
+                            },
+                            legend: {
+                              top: '5%',
+                              left: 'center'
+                            },
+                            series: [{
+                              name: 'Meeting Status',
+                              type: 'pie',
+                              radius: ['40%', '70%'],
+                              avoidLabelOverlap: false,
+                              label: {
+                                show: false,
+                                position: 'center'
+                              },
+                              emphasis: {
+                                label: {
+                                  show: true,
+                                  fontSize: '18',
+                                  fontWeight: 'bold'
+                                }
+                              },
+                              labelLine: {
+                                show: false
+                              },
+                              data: [{
+                                  value: 65,
+                                  name: 'Completed'
+                                },
+                                {
+                                  value: 25,
+                                  name: 'Scheduled'
+                                },
+                                {
+                                  value: 8,
+                                  name: 'In Progress'
+                                },
+                                {
+                                  value: 2,
+                                  name: 'Cancelled'
+                                }
+                              ]
+                            }]
+                          });
+                        });
+                    </script>
+                </div>
+            </div><!-- End Meeting Status Distribution -->
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Meeting" asp-action="MeetingAddEdit" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-2"></i>Schedule New Meeting
+                        </a>
+                        <a asp-controller="Staff" asp-action="StaffAddEdit" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-2"></i>Add Staff Member
+                        </a>
+                        <a asp-controller="Department" asp-action="DepartmentAddEdit" class="btn btn-outline-secondary">
+                            <i class="bi bi-building me-2"></i>Create Department
+                        </a>
+                        <a asp-controller="MeetingVenue" asp-action="MeetingVenueAddEdit" class="btn btn-outline-info">
+                            <i class="bi bi-geo-alt me-2"></i>Add Meeting Venue
+                        </a>
                     </div>
-                </div><!-- End Website Traffic -->
-                <!-- News & Updates Traffic -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
+                </div>
+            </div><!-- End Quick Actions -->
 
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
+        </div><!-- End Right side columns -->
 
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
-
-                        <div class="news">
-                            <div class="post-item clearfix">
-                                <img src="assets/img/news-1.jpg" alt="">
-                                <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-                                <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="assets/img/news-2.jpg" alt="">
-                                <h4><a href="#">Quidem autem et impedit</a></h4>
-                                <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="assets/img/news-3.jpg" alt="">
-                                <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                                <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="assets/img/news-4.jpg" alt="">
-                                <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                                <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="assets/img/news-5.jpg" alt="">
-                                <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                                <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-                            </div>
-
-                        </div><!-- End sidebar recent posts-->
-
-                    </div>
-                </div><!-- End News & Updates -->
-
-            </div><!-- End Right side columns -->
-
-        </div>
-    </section>
+    </div>
+</section>
