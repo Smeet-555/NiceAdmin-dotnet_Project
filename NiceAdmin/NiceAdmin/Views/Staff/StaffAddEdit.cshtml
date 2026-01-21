@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = Model.StaffId == 0 ? "Add Staff" : "Edit Staff";
-    bool isEdit = Model.StaffId != 0;
 }
 
 <div class="pagetitle">
@@ -23,37 +22,27 @@
 <section class="section">
     <div class="row">
         <div class="col-lg-8">
-
             <div class="card">
                 <div class="card-body">
-
                     <h5 class="card-title">
                         <i class="bi bi-person text-primary me-2"></i>
-                        @(isEdit ? "Edit Staff Details" : "Add New Staff Member")
+                        Staff Information
                     </h5>
 
-                    <form asp-controller="Staff" asp-action="Save" method="post" class="row g-3">
+                    <form asp-controller="Staff" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
                         <input asp-for="StaffId" type="hidden" />
-
-                        <!-- Staff Name -->
+                        
                         <div class="col-md-6">
-                            <label asp-for="StaffName" class="form-label fw-bold">
-                                Staff Name <span class="text-danger">*</span>
-                            </label>
-                            <input asp-for="StaffName" 
-                                   type="text"
-                                   class="form-control"
-                                   maxlength="50"
-                                   placeholder="Enter staff name"
-                                   required />
+                            <label asp-for="StaffName" class="form-label">Staff Name *</label>
+                            <input asp-for="StaffName" class="form-control" placeholder="Enter staff name" required />
                             <span asp-validation-for="StaffName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid staff name.
+                            </div>
                         </div>
 
-                        <!-- Department -->
                         <div class="col-md-6">
-                            <label asp-for="DepartmentName" class="form-label fw-bold">
-                                Department <span class="text-danger">*</span>
-                            </label>
+                            <label asp-for="DepartmentName" class="form-label">Department *</label>
                             <select asp-for="DepartmentName" class="form-select" required>
                                 <option value="">Select Department</option>
                                 <option value="HR">HR</option>
@@ -61,45 +50,38 @@
                                 <option value="IT">IT</option>
                                 <option value="Operations">Operations</option>
                                 <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
                             </select>
                             <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please select a department.
+                            </div>
                         </div>
 
-                        <!-- Mobile Number -->
                         <div class="col-md-6">
-                            <label asp-for="MobileNo" class="form-label fw-bold">
-                                Mobile Number <span class="text-danger">*</span>
-                            </label>
-                            <input asp-for="MobileNo"
-                                   type="text"
-                                   class="form-control"
-                                   maxlength="20"
-                                   placeholder="Enter mobile number"
-                                   required />
+                            <label asp-for="MobileNo" class="form-label">Mobile Number *</label>
+                            <input asp-for="MobileNo" class="form-control" placeholder="Enter mobile number" required />
                             <span asp-validation-for="MobileNo" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid mobile number.
+                            </div>
                         </div>
 
-                        <!-- Email Address -->
                         <div class="col-md-6">
-                            <label asp-for="EmailAddress" class="form-label fw-bold">
-                                Email Address <span class="text-danger">*</span>
-                            </label>
-                            <input asp-for="EmailAddress"
-                                   type="email"
-                                   class="form-control"
-                                   maxlength="50"
-                                   placeholder="Enter email address"
-                                   required />
+                            <label asp-for="EmailAddress" class="form-label">Email Address *</label>
+                            <input asp-for="EmailAddress" type="email" class="form-control" placeholder="Enter email address" required />
                             <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                            <div class="invalid-feedback">
+                                Please provide a valid email address.
+                            </div>
                         </div>
 
-                        <!-- Buttons -->
                         <div class="col-12">
                             <hr class="my-4">
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-lg me-1"></i>
-                                    @(isEdit ? "Update Staff" : "Save Staff")
+                                    @(Model.StaffId == 0 ? "Create Staff" : "Update Staff")
                                 </button>
                                 <a asp-controller="Staff" asp-action="StaffList" class="btn btn-secondary">
                                     <i class="bi bi-arrow-left me-1"></i>
@@ -107,12 +89,9 @@
                                 </a>
                             </div>
                         </div>
-
                     </form>
-
                 </div>
             </div>
-
         </div>
 
         <div class="col-lg-4">
@@ -125,10 +104,10 @@
                     <div class="alert alert-info">
                         <h6 class="alert-heading">Staff Guidelines:</h6>
                         <ul class="mb-0 small">
-                            <li>All fields marked with * are required</li>
+                            <li>Staff name should be unique</li>
                             <li>Email address must be valid</li>
-                            <li>Mobile number should be 10 digits</li>
-                            <li>@(isEdit ? "Update existing staff details" : "Add new staff member to the system")</li>
+                            <li>Fields marked with * are required</li>
+                            <li>@(Model.StaffId == 0 ? "New staff member will be created" : "Existing staff member will be updated")</li>
                         </ul>
                     </div>
                 </div>
@@ -139,4 +118,22 @@
 
 {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 }
