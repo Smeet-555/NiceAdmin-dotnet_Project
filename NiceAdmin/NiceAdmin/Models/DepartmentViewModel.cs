@@ -8,9 +8,9 @@ namespace NiceAdmin.Models
         [Key]
         public int DepartmentId { get; set; }
 
-        [Required(ErrorMessage = "Department name is required.")]
-        [StringLength(100, MinimumLength = 2, 
-            ErrorMessage = "Department name must be between 2 and 100 characters.")]
+        // [Required(ErrorMessage = "Department name is required.")]
+        // [StringLength(100, MinimumLength = 2, 
+            // ErrorMessage = "Department name must be between 2 and 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
 
         [Required]

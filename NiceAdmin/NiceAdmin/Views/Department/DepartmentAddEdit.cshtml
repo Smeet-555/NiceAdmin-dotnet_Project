@@ -35,11 +35,11 @@
                         
                         <div class="col-md-12">
                             <label asp-for="DepartmentName" class="form-label">Department Name *</label>
-                            <input asp-for="DepartmentName" class="form-control" placeholder="Enter department name" required />
+                            <input asp-for="DepartmentName" class="form-control" placeholder="Enter department name" />
                             <span asp-validation-for="DepartmentName" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                Please provide a valid department name (2-100 characters).
-                            </div>
+                            @* <div class="invalid-feedback"> *@
+                            @*     Please provide a valid department name (2-100 characters). *@
+                            @* </div> *@
                         </div>
 
                         <div class="col-md-6">

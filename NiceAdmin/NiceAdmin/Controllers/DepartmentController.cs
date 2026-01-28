@@ -65,6 +65,11 @@ public class DepartmentController : Controller
     [HttpPost]
     public IActionResult Save(DepartmentViewModel model)
     {
+        ModelState.Remove("DepartmentName");
+        if (string.IsNullOrEmpty(model.DepartmentName))
+        {
+            ModelState.AddModelError("DepartmentName", "Department name is required!");
+        }
         if (ModelState.IsValid)
         {
             if (model.DepartmentId == 0)
