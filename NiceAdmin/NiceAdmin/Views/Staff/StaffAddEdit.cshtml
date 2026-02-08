@@ -42,17 +42,18 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="DepartmentName" class="form-label">Department *</label>
-                            <select asp-for="DepartmentName" class="form-select" required>
+                            <label asp-for="DepartmentId" class="form-label">Department *</label>
+                            <select asp-for="DepartmentId" class="form-select" required>
                                 <option value="">Select Department</option>
-                                <option value="HR">HR</option>
-                                <option value="Finance">Finance</option>
-                                <option value="IT">IT</option>
-                                <option value="Operations">Operations</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Sales">Sales</option>
+                                @if (ViewBag.Departments != null)
+                                {
+                                    @foreach (dynamic dept in ViewBag.Departments)
+                                    {
+                                        <option value="@dept.Value">@dept.Text</option>
+                                    }
+                                }
                             </select>
-                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 Please select a department.
                             </div>

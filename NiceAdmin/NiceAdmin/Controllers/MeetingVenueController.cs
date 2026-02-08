@@ -1,112 +1,188 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using NiceAdmin.Models;
+using Microsoft.Data.SqlClient;
 
 namespace NiceAdmin.Controllers
 {
     public class MeetingVenueController : Controller
     {
-        // Static list to simulate database
-        private static List<MeetingVenueViewModel> _venues = new List<MeetingVenueViewModel>
+        private readonly IConfiguration _configuration;
+
+        public MeetingVenueController(IConfiguration configuration)
         {
-            new MeetingVenueViewModel
-            {
-                VenueId = 1,
-                VenueName = "Conference Room A",
-                Created = DateTime.Now.AddDays(-10),
-                Modified = DateTime.Now.AddDays(-2)
-            },
-            new MeetingVenueViewModel
-            {
-                VenueId = 2,
-                VenueName = "Main Auditorium",
-                Created = DateTime.Now.AddDays(-20),
-                Modified = DateTime.Now.AddDays(-5)
-            },
-            new MeetingVenueViewModel
-            {
-                VenueId = 3,
-                VenueName = "Training Hall",
-                Created = DateTime.Now.AddDays(-15),
-                Modified = DateTime.Now
-            }
-        };
+            _configuration = configuration;
+        }
+
+        public IActionResult Index()
+        {
+            return MeetingVenueList();
+        }
 
         public IActionResult MeetingVenueList()
         {
-            return View(_venues);
+            List<MeetingVenueViewModel> venues = new();
+
+            try
+            {
+                var connectionString = _configuration.GetConnectionString("DefaultConnection");
+                
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    TempData["ErrorMessage"] = "Connection string is not configured!";
+                    return View("MeetingVenueList", venues);
+                }
+
+                using SqlConnection con = new(connectionString);
+                using SqlCommand cmd = new("PR_MeetingVenue_SelectAll", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    venues.Add(new MeetingVenueViewModel
+                    {
+                        VenueId = Convert.ToInt32(reader["MeetingVenueID"]),
+                        VenueName = reader["MeetingVenueName"]?.ToString() ?? string.Empty,
+                        Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
+                        Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                    });
+                }
+                
+                TempData["SuccessMessage"] = $"Loaded {venues.Count} meeting venues successfully!";
+            }
+            catch (SqlException sqlEx)
+            {
+                TempData["ErrorMessage"] = $"SQL Error: {sqlEx.Message} | Error Number: {sqlEx.Number} | Line: {sqlEx.LineNumber}";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.GetType().Name} - {ex.Message} | Stack: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace.Length))}";
+            }
+
+            return View("MeetingVenueList", venues);
         }
 
         public IActionResult MeetingVenueAddEdit(int? id)
         {
-            if (id.HasValue)
+            if (!id.HasValue || id == 0)
             {
-                // Edit mode - find the venue
-                var venue = _venues.FirstOrDefault(v => v.VenueId == id.Value);
-                if (venue == null)
+                // Add mode - create new meeting venue
+                return View(new MeetingVenueViewModel
                 {
-                    return NotFound();
+                    VenueId = 0,
+                    Created = DateTime.Now,
+                    Modified = DateTime.Now
+                });
+            }
+
+            MeetingVenueViewModel model = null;
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_MeetingVenue_SelectByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@MeetingVenueID", id.Value);
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    model = new MeetingVenueViewModel
+                    {
+                        VenueId = Convert.ToInt32(reader["MeetingVenueID"]),
+                        VenueName = reader["MeetingVenueName"]?.ToString() ?? string.Empty,
+                        Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
+                        Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                    };
                 }
-                return View(venue);
             }
-            else
+            catch (Exception ex)
             {
-                // Add mode - create new venue
-                var newVenue = new MeetingVenueViewModel
-                {
-                    VenueId = 0 // 0 indicates new record
-                };
-                return View(newVenue);
+                TempData["ErrorMessage"] = "Error loading meeting venue: " + ex.Message;
+                return RedirectToAction("MeetingVenueList");
             }
+
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Meeting venue not found.";
+                return RedirectToAction("MeetingVenueList");
+            }
+
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Save(MeetingVenueViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                return View("MeetingVenueAddEdit", model);
+            }
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                SqlCommand cmd;
+
                 if (model.VenueId == 0)
                 {
-                    // Add new venue
-                    model.VenueId = _venues.Any() ? _venues.Max(v => v.VenueId) + 1 : 1;
-                    // Created and Modified will be handled by database
-                    _venues.Add(model);
-                    
-                    TempData["SuccessMessage"] = "Meeting venue added successfully!";
+                    // Insert new meeting venue
+                    cmd = new SqlCommand("PR_MeetingVenue_Insert", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MeetingVenueName", model.VenueName ?? string.Empty);
                 }
                 else
                 {
-                    // Update existing venue
-                    var existingVenue = _venues.FirstOrDefault(v => v.VenueId == model.VenueId);
-                    if (existingVenue != null)
-                    {
-                        existingVenue.VenueName = model.VenueName;
-                        // Modified will be handled by database
-                        
-                        TempData["SuccessMessage"] = "Meeting venue updated successfully!";
-                    }
+                    // Update existing meeting venue
+                    cmd = new SqlCommand("PR_MeetingVenue_UpdateByPK", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MeetingVenueID", model.VenueId);
+                    cmd.Parameters.AddWithValue("@MeetingVenueName", model.VenueName ?? string.Empty);
                 }
-                
-                return RedirectToAction("MeetingVenueList");
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = model.VenueId == 0
+                    ? "Meeting venue added successfully!"
+                    : "Meeting venue updated successfully!";
             }
-            
-            // If model is not valid, return to form with errors
-            return View("MeetingVenueAddEdit", model);
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error saving meeting venue: " + ex.Message;
+                return View("MeetingVenueAddEdit", model);
+            }
+
+            return RedirectToAction("MeetingVenueList");
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var venue = _venues.FirstOrDefault(v => v.VenueId == id);
-            if (venue != null)
+            try
             {
-                _venues.Remove(venue);
-                TempData["SuccessMessage"] = "Meeting venue deleted successfully!";
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_MeetingVenue_DeleteByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@MeetingVenueID", id);
+
+                con.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = rowsAffected > 0
+                    ? "Meeting venue deleted successfully!"
+                    : "Meeting venue not found.";
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Meeting venue not found!";
+                TempData["ErrorMessage"] = "Error deleting meeting venue: " + ex.Message;
             }
-            
+
             return RedirectToAction("MeetingVenueList");
         }
     }

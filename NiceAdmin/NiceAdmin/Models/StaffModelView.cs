@@ -12,6 +12,10 @@ namespace NiceAdmin.Models
             ErrorMessage = "Staff name must be between 2 and 100 characters.")]
         public string StaffName { get; set; } = string.Empty;
 
+        // Foreign Key
+        public int DepartmentId { get; set; }
+
+        // Display Name
         [Required(ErrorMessage = "Department name is required.")]
         [StringLength(100, ErrorMessage = "Department name cannot exceed 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
@@ -25,5 +29,8 @@ namespace NiceAdmin.Models
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         [StringLength(150, ErrorMessage = "Email address cannot exceed 150 characters.")]
         public string EmailAddress { get; set; } = string.Empty;
+
+        [StringLength(300, ErrorMessage = "Remarks cannot exceed 300 characters.")]
+        public string? Remarks { get; set; }
     }
 }

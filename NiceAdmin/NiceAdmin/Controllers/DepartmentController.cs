@@ -1,123 +1,169 @@
-using System.Diagnostics;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using NiceAdmin.Models;
+using Microsoft.Data.SqlClient;
 
 namespace NiceAdmin.Controllers;
 
 public class DepartmentController : Controller
 {
-    // Static list to simulate database (in real app, this would be a database)
-    private static List<DepartmentViewModel> _departments = new List<DepartmentViewModel>
+    private readonly IConfiguration _configuration;
+
+    public DepartmentController(IConfiguration configuration)
     {
-        new DepartmentViewModel()
-        {
-            DepartmentId = 1,
-            DepartmentName = "CSE",
-            Created = DateTime.Now.AddDays(-30),
-            Modified = DateTime.Now.AddDays(-5),
-        },
-        new DepartmentViewModel()
-        {
-            DepartmentId = 2,
-            DepartmentName = "Mechanical",
-            Created = DateTime.Now.AddDays(-25),
-            Modified = DateTime.Now.AddDays(-3),
-        },
-        new DepartmentViewModel()
-        {
-            DepartmentId = 3,
-            DepartmentName = "Civil",
-            Created = DateTime.Now.AddDays(-20),
-            Modified = DateTime.Now.AddDays(-1),
-        }
-    };
+        _configuration = configuration;
+    }
 
     public IActionResult Index()
     {
-        return View("DepartmentList", _departments);
+        List<DepartmentViewModel> departments = new();
+
+        try
+        {
+            using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+            using SqlCommand cmd = new("PR_Department_SelectAll", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            con.Open();
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                departments.Add(new DepartmentViewModel
+                {
+                    DepartmentId = Convert.ToInt32(reader["DepartmentID"]),
+                    DepartmentName = reader["DepartmentName"]?.ToString() ?? string.Empty,
+                    Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
+                    Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Error loading departments: " + ex.Message;
+        }
+
+        return View("DepartmentList", departments);
     }
     
     public IActionResult DepartmentAddEdit(int? id)
     {
-        if (id.HasValue)
-        {
-            // Edit mode - find the department
-            var department = _departments.FirstOrDefault(d => d.DepartmentId == id.Value);
-            if (department == null)
-            {
-                return NotFound();
-            }
-            return View(department);
-        }
-        else
+        if (!id.HasValue || id == 0)
         {
             // Add mode - create new department
-            var newDepartment = new DepartmentViewModel
+            return View(new DepartmentViewModel
             {
-                DepartmentId = 0, // 0 indicates new record
+                DepartmentId = 0,
                 Created = DateTime.Now,
                 Modified = DateTime.Now
-            };
-            return View(newDepartment);
+            });
         }
+
+        DepartmentViewModel model = null;
+
+        try
+        {
+            using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+            using SqlCommand cmd = new("PR_Department_SelectByPK", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DepartmentID", id.Value);
+
+            con.Open();
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                model = new DepartmentViewModel
+                {
+                    DepartmentId = Convert.ToInt32(reader["DepartmentID"]),
+                    DepartmentName = reader["DepartmentName"]?.ToString() ?? string.Empty,
+                    Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
+                    Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Error loading department: " + ex.Message;
+            return RedirectToAction("Index");
+        }
+
+        if (model == null)
+        {
+            TempData["ErrorMessage"] = "Department not found.";
+            return RedirectToAction("Index");
+        }
+
+        return View(model);
     }
 
     [HttpPost]
     public IActionResult Save(DepartmentViewModel model)
     {
-        ModelState.Remove("DepartmentName");
-        if (string.IsNullOrEmpty(model.DepartmentName))
+        if (!ModelState.IsValid)
         {
-            ModelState.AddModelError("DepartmentName", "Department name is required!");
+            return View("DepartmentAddEdit", model);
         }
-        if (ModelState.IsValid)
+
+        try
         {
+            using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+            SqlCommand cmd;
+
             if (model.DepartmentId == 0)
             {
-                // Add new department
-                model.DepartmentId = _departments.Max(d => d.DepartmentId) + 1;
-                model.Created = DateTime.Now;
-                model.Modified = DateTime.Now;
-                _departments.Add(model);
-                
-                TempData["SuccessMessage"] = "Department added successfully!";
+                // Insert new department
+                cmd = new SqlCommand("PR_Department_Insert", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DepartmentName", model.DepartmentName ?? string.Empty);
             }
             else
             {
                 // Update existing department
-                var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == model.DepartmentId);
-                if (existingDepartment != null)
-                {
-                    existingDepartment.DepartmentName = model.DepartmentName;
-                    existingDepartment.Modified = DateTime.Now;
-                    
-                    TempData["SuccessMessage"] = "Department updated successfully!";
-                }
+                cmd = new SqlCommand("PR_Department_UpdateByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DepartmentID", model.DepartmentId);
+                cmd.Parameters.AddWithValue("@DepartmentName", model.DepartmentName ?? string.Empty);
             }
-            
-            return RedirectToAction("Index");
-        }
-        
-        // If model is not valid, return to form with errors
-        return View("DepartmentAddEdit", model);
-    }
 
-    [HttpPost]
-    [HttpPost]
-    public IActionResult Delete(int id)
-    {
-        var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
-        if (department != null)
-        {
-            _departments.Remove(department);
-            TempData["SuccessMessage"] = "Department deleted successfully!";
+            con.Open();
+            cmd.ExecuteNonQuery();
+
+            TempData["SuccessMessage"] = model.DepartmentId == 0
+                ? "Department added successfully!"
+                : "Department updated successfully!";
         }
-        else
+        catch (Exception ex)
         {
-            TempData["ErrorMessage"] = "Department not found!";
+            TempData["ErrorMessage"] = "Error saving department: " + ex.Message;
+            return View("DepartmentAddEdit", model);
         }
-    
+
         return RedirectToAction("Index");
     }
 
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        try
+        {
+            using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+            using SqlCommand cmd = new("PR_Department_DeleteByPK", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DepartmentID", id);
+
+            con.Open();
+            int rowsAffected = cmd.ExecuteNonQuery();
+
+            TempData["SuccessMessage"] = rowsAffected > 0
+                ? "Department deleted successfully!"
+                : "Department not found.";
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Error deleting department: " + ex.Message;
+        }
+
+        return RedirectToAction("Index");
+    }
 }

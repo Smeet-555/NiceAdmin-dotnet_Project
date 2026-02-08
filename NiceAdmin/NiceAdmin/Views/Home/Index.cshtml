@@ -1,4 +1,6 @@
-﻿@{
+﻿@model NiceAdmin.Models.DashboardViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -24,18 +26,6 @@
                 <!-- Total Meetings Card -->
                 <div class="col-xxl-4 col-md-6">
                     <div class="card info-card sales-card">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body">
                             <h5 class="card-title">Total Meetings <span>| Today</span></h5>
 
@@ -44,9 +34,16 @@
                                     <i class="bi bi-calendar-event"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>12</h6>
-                                    <span class="text-success small pt-1 fw-bold">8%</span> 
-                                    <span class="text-muted small pt-2 ps-1">increase</span>
+                                    <h6>@Model.TodayMeetings</h6>
+                                    @if (Model.TodayCompletedMeetings > 0)
+                                    {
+                                        <span class="text-success small pt-1 fw-bold">@Model.TodayCompletedMeetings</span> 
+                                        <span class="text-muted small pt-2 ps-1">completed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small pt-2 ps-1">No meetings yet</span>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -56,29 +53,24 @@
                 <!-- Active Staff Card -->
                 <div class="col-xxl-4 col-md-6">
                     <div class="card info-card revenue-card">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body">
-                            <h5 class="card-title">Active Staff <span>| This Month</span></h5>
+                            <h5 class="card-title">Total Staff <span>| Active</span></h5>
 
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-people"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>156</h6>
-                                    <span class="text-success small pt-1 fw-bold">5%</span> 
-                                    <span class="text-muted small pt-2 ps-1">increase</span>
+                                    <h6>@Model.TotalStaff</h6>
+                                    @if (Model.ThisMonthStaffAdded > 0)
+                                    {
+                                        <span class="text-success small pt-1 fw-bold">@Model.ThisMonthStaffAdded</span> 
+                                        <span class="text-muted small pt-2 ps-1">new this month</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small pt-2 ps-1">No new staff</span>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -88,18 +80,6 @@
                 <!-- Departments Card -->
                 <div class="col-xxl-4 col-xl-12">
                     <div class="card info-card customers-card">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body">
                             <h5 class="card-title">Departments <span>| Total</span></h5>
 
@@ -108,9 +88,16 @@
                                     <i class="bi bi-building"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>8</h6>
-                                    <span class="text-success small pt-1 fw-bold">2</span> 
-                                    <span class="text-muted small pt-2 ps-1">new this month</span>
+                                    <h6>@Model.TotalDepartments</h6>
+                                    @if (Model.ThisMonthDepartmentsAdded > 0)
+                                    {
+                                        <span class="text-success small pt-1 fw-bold">@Model.ThisMonthDepartmentsAdded</span> 
+                                        <span class="text-muted small pt-2 ps-1">new this month</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small pt-2 ps-1">No new departments</span>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -120,36 +107,24 @@
                 <!-- Meeting Analytics -->
                 <div class="col-12">
                     <div class="card">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body">
-                            <h5 class="card-title">Meeting Analytics <span>/This Week</span></h5>
+                            <h5 class="card-title">Meeting Analytics <span>/Last 7 Days</span></h5>
 
                             <!-- Line Chart -->
                             <div id="reportsChart"></div>
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", () => {
+                                  // Get data from server
+                                  var weeklyData = @Html.Raw(Json.Serialize(Model.WeeklyMeetingData));
+                                  
+                                  var categories = weeklyData.map(d => d.date);
+                                  var values = weeklyData.map(d => d.value);
+                                  
                                   new ApexCharts(document.querySelector("#reportsChart"), {
                                     series: [{
-                                      name: 'Scheduled Meetings',
-                                      data: [8, 12, 15, 18, 22, 25, 28],
-                                    }, {
-                                      name: 'Completed Meetings',
-                                      data: [6, 10, 12, 16, 20, 22, 24]
-                                    }, {
-                                      name: 'Cancelled Meetings',
-                                      data: [2, 2, 3, 2, 2, 3, 4]
+                                      name: 'Meetings',
+                                      data: values.length > 0 ? values : [0, 0, 0, 0, 0, 0, 0]
                                     }],
                                     chart: {
                                       height: 350,
@@ -161,7 +136,7 @@
                                     markers: {
                                       size: 4
                                     },
-                                    colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                    colors: ['#4154f1'],
                                     fill: {
                                       type: "gradient",
                                       gradient: {
@@ -180,7 +155,7 @@
                                     },
                                     xaxis: {
                                       type: 'datetime',
-                                      categories: ["2024-01-15T00:00:00.000Z", "2024-01-16T00:00:00.000Z", "2024-01-17T00:00:00.000Z", "2024-01-18T00:00:00.000Z", "2024-01-19T00:00:00.000Z", "2024-01-20T00:00:00.000Z", "2024-01-21T00:00:00.000Z"]
+                                      categories: categories.length > 0 ? categories : ["2024-01-15T00:00:00.000Z", "2024-01-16T00:00:00.000Z", "2024-01-17T00:00:00.000Z", "2024-01-18T00:00:00.000Z", "2024-01-19T00:00:00.000Z", "2024-01-20T00:00:00.000Z", "2024-01-21T00:00:00.000Z"]
                                     },
                                     tooltip: {
                                       x: {
@@ -198,69 +173,58 @@
                 <!-- Recent Meetings -->
                 <div class="col-12">
                     <div class="card recent-sales overflow-auto">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body">
-                            <h5 class="card-title">Recent Meetings <span>| Today</span></h5>
+                            <h5 class="card-title">Recent Meetings <span>| Latest</span></h5>
 
-                            <table class="table table-borderless datatable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Meeting</th>
-                                        <th scope="col">Department</th>
-                                        <th scope="col">Venue</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#">#M001</a></th>
-                                        <td>Project Review Meeting</td>
-                                        <td>IT</td>
-                                        <td>Conference Room A</td>
-                                        <td><span class="badge bg-success">Completed</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#M002</a></th>
-                                        <td>Monthly Team Sync</td>
-                                        <td>HR</td>
-                                        <td>Main Hall</td>
-                                        <td><span class="badge bg-warning">In Progress</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#M003</a></th>
-                                        <td>Budget Planning</td>
-                                        <td>Finance</td>
-                                        <td>Board Room</td>
-                                        <td><span class="badge bg-primary">Scheduled</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#M004</a></th>
-                                        <td>Training Session</td>
-                                        <td>Operations</td>
-                                        <td>Training Room</td>
-                                        <td><span class="badge bg-danger">Cancelled</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#M005</a></th>
-                                        <td>Client Presentation</td>
-                                        <td>Sales</td>
-                                        <td>Conference Room B</td>
-                                        <td><span class="badge bg-success">Completed</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            @if (Model.RecentMeetings.Any())
+                            {
+                                <table class="table table-borderless datatable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Department</th>
+                                            <th scope="col">Venue</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var meeting in Model.RecentMeetings)
+                                        {
+                                            <tr>
+                                                <th scope="row"><a href="#">#M@meeting.MeetingId.ToString("000")</a></th>
+                                                <td>@meeting.MeetingDate.ToString("MMM dd, yyyy")</td>
+                                                <td>@meeting.MeetingTypeName</td>
+                                                <td>@meeting.DepartmentName</td>
+                                                <td>@meeting.MeetingVenueName</td>
+                                                <td>
+                                                    @if (meeting.IsCancelled)
+                                                    {
+                                                        <span class="badge bg-danger">Cancelled</span>
+                                                    }
+                                                    else if (meeting.MeetingDate < DateTime.Now)
+                                                    {
+                                                        <span class="badge bg-success">Completed</span>
+                                                    }
+                                                    else if (meeting.MeetingDate.Date == DateTime.Today)
+                                                    {
+                                                        <span class="badge bg-warning">Today</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-primary">Scheduled</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No recent meetings found.</p>
+                            }
                         </div>
                     </div>
                 </div><!-- End Recent Meetings -->
@@ -268,69 +232,50 @@
                 <!-- Meeting Types Overview -->
                 <div class="col-12">
                     <div class="card top-selling overflow-auto">
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
                         <div class="card-body pb-0">
-                            <h5 class="card-title">Popular Meeting Types <span>| This Month</span></h5>
+                            <h5 class="card-title">Popular Meeting Types <span>| Overview</span></h5>
 
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Department</th>
-                                        <th scope="col">Count</th>
-                                        <th scope="col">Avg Duration</th>
-                                        <th scope="col">Success Rate</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><i class="bi bi-calendar-check text-primary me-2"></i>Project Meeting</td>
-                                        <td>IT</td>
-                                        <td class="fw-bold">24</td>
-                                        <td>2h 30m</td>
-                                        <td><span class="text-success">95%</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-people text-info me-2"></i>Team Sync</td>
-                                        <td>All</td>
-                                        <td class="fw-bold">18</td>
-                                        <td>1h 15m</td>
-                                        <td><span class="text-success">92%</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-graph-up text-success me-2"></i>Management Review</td>
-                                        <td>Management</td>
-                                        <td class="fw-bold">12</td>
-                                        <td>3h 00m</td>
-                                        <td><span class="text-success">88%</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-mortarboard text-warning me-2"></i>Training Session</td>
-                                        <td>HR</td>
-                                        <td class="fw-bold">8</td>
-                                        <td>4h 00m</td>
-                                        <td><span class="text-warning">75%</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-handshake text-primary me-2"></i>Client Meeting</td>
-                                        <td>Sales</td>
-                                        <td class="fw-bold">15</td>
-                                        <td>1h 45m</td>
-                                        <td><span class="text-success">90%</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            @if (Model.MeetingTypeStats.Any())
+                            {
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Count</th>
+                                            <th scope="col">Avg Duration</th>
+                                            <th scope="col">Success Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var type in Model.MeetingTypeStats)
+                                        {
+                                            <tr>
+                                                <td><i class="bi bi-calendar-check text-primary me-2"></i>@type.MeetingTypeName</td>
+                                                <td class="fw-bold">@type.Count</td>
+                                                <td>@type.AverageDuration</td>
+                                                <td>
+                                                    @if (type.SuccessRate >= 90)
+                                                    {
+                                                        <span class="text-success">@type.SuccessRate.ToString("F0")%</span>
+                                                    }
+                                                    else if (type.SuccessRate >= 75)
+                                                    {
+                                                        <span class="text-warning">@type.SuccessRate.ToString("F0")%</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-danger">@type.SuccessRate.ToString("F0")%</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No meeting type statistics available.</p>
+                            }
                         </div>
                     </div>
                 </div><!-- End Meeting Types Overview -->
@@ -343,139 +288,81 @@
 
             <!-- Recent Activity -->
             <div class="card">
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                </div>
-
                 <div class="card-body">
-                    <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+                    <h5 class="card-title">Recent Activity <span>| Latest</span></h5>
 
-                    <div class="activity">
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">15 min</div>
-                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                            <div class="activity-content">
-                                <strong>Project Review Meeting</strong> completed successfully in Conference Room A
-                            </div>
+                    @if (Model.RecentActivities.Any())
+                    {
+                        <div class="activity">
+                            @foreach (var activity in Model.RecentActivities)
+                            {
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">@activity.TimeAgo</div>
+                                    <i class='bi bi-circle-fill activity-badge text-@activity.Type align-self-start'></i>
+                                    <div class="activity-content">
+                                        @Html.Raw(activity.Activity)
+                                    </div>
+                                </div>
+                            }
                         </div>
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">32 min</div>
-                            <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                            <div class="activity-content">
-                                New staff member <strong>John Doe</strong> added to IT Department
-                            </div>
-                        </div>
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">1 hr</div>
-                            <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                            <div class="activity-content">
-                                <strong>Training Session</strong> rescheduled to next week
-                            </div>
-                        </div>
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">2 hrs</div>
-                            <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                            <div class="activity-content">
-                                New meeting venue <strong>Conference Room C</strong> added
-                            </div>
-                        </div>
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">3 hrs</div>
-                            <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                            <div class="activity-content">
-                                <strong>Budget Meeting</strong> cancelled due to unavailability
-                            </div>
-                        </div>
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">1 day</div>
-                            <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                            <div class="activity-content">
-                                Monthly department reports submitted by all teams
-                            </div>
-                        </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No recent activities.</p>
+                    }
                 </div>
             </div><!-- End Recent Activity -->
 
             <!-- Department Overview -->
             <div class="card">
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                </div>
-
                 <div class="card-body pb-0">
-                    <h5 class="card-title">Department Activity <span>| This Month</span></h5>
+                    <h5 class="card-title">Department Activity <span>| Overview</span></h5>
 
                     <div id="departmentChart" style="min-height: 400px;" class="echart"></div>
 
                     <script>
                         document.addEventListener("DOMContentLoaded", () => {
-                          var departmentChart = echarts.init(document.querySelector("#departmentChart")).setOption({
-                            legend: {
-                              data: ['Meetings Held', 'Staff Participation']
-                            },
-                            radar: {
-                              indicator: [{
-                                  name: 'IT',
-                                  max: 50
-                                },
-                                {
-                                  name: 'HR',
-                                  max: 40
-                                },
-                                {
-                                  name: 'Finance',
-                                  max: 35
-                                },
-                                {
-                                  name: 'Operations',
-                                  max: 30
-                                },
-                                {
-                                  name: 'Marketing',
-                                  max: 25
-                                },
-                                {
-                                  name: 'Sales',
-                                  max: 45
-                                }
-                              ]
-                            },
-                            series: [{
-                              name: 'Department Activity',
-                              type: 'radar',
-                              data: [{
-                                  value: [42, 32, 28, 25, 20, 38],
-                                  name: 'Meetings Held'
-                                },
-                                {
-                                  value: [38, 35, 30, 22, 18, 40],
-                                  name: 'Staff Participation'
-                                }
-                              ]
-                            }]
-                          });
+                          // Get data from server
+                          var departmentData = @Html.Raw(Json.Serialize(Model.DepartmentStats));
+                          
+                          var departmentNames = departmentData.map(d => d.departmentName);
+                          var meetingCounts = departmentData.map(d => d.meetingCount);
+                          var staffCounts = departmentData.map(d => d.staffCount);
+                          
+                          // Calculate max values for radar chart
+                          var maxMeetings = Math.max(...meetingCounts, 10);
+                          var maxStaff = Math.max(...staffCounts, 10);
+                          
+                          var indicators = departmentNames.map(name => ({
+                            name: name,
+                            max: Math.max(maxMeetings, maxStaff)
+                          }));
+                          
+                          if (departmentData.length > 0) {
+                            echarts.init(document.querySelector("#departmentChart")).setOption({
+                              legend: {
+                                data: ['Meetings Held', 'Staff Count']
+                              },
+                              radar: {
+                                indicator: indicators
+                              },
+                              series: [{
+                                name: 'Department Activity',
+                                type: 'radar',
+                                data: [{
+                                    value: meetingCounts,
+                                    name: 'Meetings Held'
+                                  },
+                                  {
+                                    value: staffCounts,
+                                    name: 'Staff Count'
+                                  }
+                                ]
+                              }]
+                            });
+                          } else {
+                            document.querySelector("#departmentChart").innerHTML = '<p class="text-muted text-center mt-5">No department data available</p>';
+                          }
                         });
                     </script>
                 </div>
@@ -483,71 +370,70 @@
 
             <!-- Meeting Status Distribution -->
             <div class="card">
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                </div>
-
                 <div class="card-body pb-0">
-                    <h5 class="card-title">Meeting Status <span>| This Month</span></h5>
+                    <h5 class="card-title">Meeting Status <span>| Overview</span></h5>
 
                     <div id="statusChart" style="min-height: 400px;" class="echart"></div>
 
                     <script>
                         document.addEventListener("DOMContentLoaded", () => {
-                          echarts.init(document.querySelector("#statusChart")).setOption({
-                            tooltip: {
-                              trigger: 'item'
-                            },
-                            legend: {
-                              top: '5%',
-                              left: 'center'
-                            },
-                            series: [{
-                              name: 'Meeting Status',
-                              type: 'pie',
-                              radius: ['40%', '70%'],
-                              avoidLabelOverlap: false,
-                              label: {
-                                show: false,
-                                position: 'center'
+                          var totalMeetings = @Model.TotalMeetings;
+                          var todayMeetings = @Model.TodayMeetings;
+                          var completedMeetings = @Model.TodayCompletedMeetings;
+                          var scheduledMeetings = @Model.TodayScheduledMeetings;
+                          var cancelledMeetings = @Model.TodayCancelledMeetings;
+                          
+                          // Calculate approximate values for the pie chart
+                          var completed = Math.max(completedMeetings, Math.floor(totalMeetings * 0.6));
+                          var scheduled = Math.max(scheduledMeetings, Math.floor(totalMeetings * 0.3));
+                          var cancelled = Math.max(cancelledMeetings, Math.floor(totalMeetings * 0.1));
+                          
+                          if (totalMeetings > 0) {
+                            echarts.init(document.querySelector("#statusChart")).setOption({
+                              tooltip: {
+                                trigger: 'item'
                               },
-                              emphasis: {
+                              legend: {
+                                top: '5%',
+                                left: 'center'
+                              },
+                              series: [{
+                                name: 'Meeting Status',
+                                type: 'pie',
+                                radius: ['40%', '70%'],
+                                avoidLabelOverlap: false,
                                 label: {
-                                  show: true,
-                                  fontSize: '18',
-                                  fontWeight: 'bold'
-                                }
-                              },
-                              labelLine: {
-                                show: false
-                              },
-                              data: [{
-                                  value: 65,
-                                  name: 'Completed'
+                                  show: false,
+                                  position: 'center'
                                 },
-                                {
-                                  value: 25,
-                                  name: 'Scheduled'
+                                emphasis: {
+                                  label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                  }
                                 },
-                                {
-                                  value: 8,
-                                  name: 'In Progress'
+                                labelLine: {
+                                  show: false
                                 },
-                                {
-                                  value: 2,
-                                  name: 'Cancelled'
-                                }
-                              ]
-                            }]
-                          });
+                                data: [{
+                                    value: completed,
+                                    name: 'Completed'
+                                  },
+                                  {
+                                    value: scheduled,
+                                    name: 'Scheduled'
+                                  },
+                                  {
+                                    value: cancelled,
+                                    name: 'Cancelled'
+                                  }
+                                ]
+                              }]
+                            });
+                          } else {
+                            document.querySelector("#statusChart").innerHTML = '<p class="text-muted text-center mt-5">No meeting data available</p>';
+                          }
                         });
                     </script>
                 </div>

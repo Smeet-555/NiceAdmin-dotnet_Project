@@ -12,6 +12,12 @@ namespace NiceAdmin.Models
         [DataType(DataType.Date)]
         public DateTime MeetingDate { get; set; }
 
+        // Foreign Keys
+        public int MeetingVenueId { get; set; }
+        public int MeetingTypeId { get; set; }
+        public int DepartmentId { get; set; }
+
+        // Display Names
         [Required(ErrorMessage = "Meeting venue is required.")]
         [StringLength(150, ErrorMessage = "Meeting venue name cannot exceed 150 characters.")]
         public string MeetingVenueName { get; set; } = string.Empty;
@@ -23,6 +29,9 @@ namespace NiceAdmin.Models
         [Required(ErrorMessage = "Department name is required.")]
         [StringLength(100, ErrorMessage = "Department name cannot exceed 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
+
+        [StringLength(500, ErrorMessage = "Meeting description cannot exceed 500 characters.")]
+        public string MeetingDescription { get; set; } = string.Empty;
 
         [Required]
         public bool IsCancelled { get; set; }

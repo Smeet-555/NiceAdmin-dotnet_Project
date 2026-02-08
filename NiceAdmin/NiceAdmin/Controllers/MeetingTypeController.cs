@@ -1,108 +1,172 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using NiceAdmin.Models;
+using Microsoft.Data.SqlClient;
 
 namespace NiceAdmin.Controllers
 {
     public class MeetingTypeController : Controller
     {
-        // Static list to simulate database
-        private static List<MeetingTypeViewModel> _meetingTypes = new List<MeetingTypeViewModel>
+        private readonly IConfiguration _configuration;
+
+        public MeetingTypeController(IConfiguration configuration)
         {
-            new MeetingTypeViewModel
-            {
-                MeetingTypeId = 1,
-                MeetingTypeName = "Project Meeting",
-                Remarks = "Weekly project discussion"
-            },
-            new MeetingTypeViewModel
-            {
-                MeetingTypeId = 2,
-                MeetingTypeName = "Management Meeting",
-                Remarks = "Monthly review meeting"
-            },
-            new MeetingTypeViewModel
-            {
-                MeetingTypeId = 3,
-                MeetingTypeName = "Training Session",
-                Remarks = "Employee skill enhancement"
-            }
-        };
+            _configuration = configuration;
+        }
+
+        public IActionResult Index()
+        {
+            return MeetingTypeList();
+        }
 
         public IActionResult MeetingTypeList()
         {
-            return View(_meetingTypes);
+            List<MeetingTypeViewModel> meetingTypes = new();
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_MeetingType_SelectAll", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    meetingTypes.Add(new MeetingTypeViewModel
+                    {
+                        MeetingTypeId = Convert.ToInt32(reader["MeetingTypeID"]),
+                        MeetingTypeName = reader["MeetingTypeName"]?.ToString() ?? string.Empty,
+                        Remarks = reader["Remarks"]?.ToString() ?? string.Empty
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error loading meeting types: " + ex.Message;
+            }
+
+            return View("MeetingTypeList", meetingTypes);
         }
 
         public IActionResult MeetingTypeAddEdit(int? id)
         {
-            if (id.HasValue)
-            {
-                // Edit mode - find the meeting type
-                var meetingType = _meetingTypes.FirstOrDefault(mt => mt.MeetingTypeId == id.Value);
-                if (meetingType == null)
-                {
-                    return NotFound();
-                }
-                return View(meetingType);
-            }
-            else
+            if (!id.HasValue || id == 0)
             {
                 // Add mode - create new meeting type
-                var newMeetingType = new MeetingTypeViewModel
+                return View(new MeetingTypeViewModel
                 {
-                    MeetingTypeId = 0 // 0 indicates new record
-                };
-                return View(newMeetingType);
+                    MeetingTypeId = 0
+                });
             }
+
+            MeetingTypeViewModel model = null;
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_MeetingType_SelectByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@MeetingTypeID", id.Value);
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    model = new MeetingTypeViewModel
+                    {
+                        MeetingTypeId = Convert.ToInt32(reader["MeetingTypeID"]),
+                        MeetingTypeName = reader["MeetingTypeName"]?.ToString() ?? string.Empty,
+                        Remarks = reader["Remarks"]?.ToString() ?? string.Empty
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error loading meeting type: " + ex.Message;
+                return RedirectToAction("MeetingTypeList");
+            }
+
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Meeting type not found.";
+                return RedirectToAction("MeetingTypeList");
+            }
+
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Save(MeetingTypeViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                return View("MeetingTypeAddEdit", model);
+            }
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                SqlCommand cmd;
+
                 if (model.MeetingTypeId == 0)
                 {
-                    // Add new meeting type
-                    model.MeetingTypeId = _meetingTypes.Any() ? _meetingTypes.Max(mt => mt.MeetingTypeId) + 1 : 1;
-                    _meetingTypes.Add(model);
-                    
-                    TempData["SuccessMessage"] = "Meeting type added successfully!";
+                    // Insert new meeting type
+                    cmd = new SqlCommand("PR_MeetingType_Insert", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MeetingTypeName", model.MeetingTypeName ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@Remarks", model.Remarks ?? string.Empty);
                 }
                 else
                 {
                     // Update existing meeting type
-                    var existingMeetingType = _meetingTypes.FirstOrDefault(mt => mt.MeetingTypeId == model.MeetingTypeId);
-                    if (existingMeetingType != null)
-                    {
-                        existingMeetingType.MeetingTypeName = model.MeetingTypeName;
-                        existingMeetingType.Remarks = model.Remarks;
-                        
-                        TempData["SuccessMessage"] = "Meeting type updated successfully!";
-                    }
+                    cmd = new SqlCommand("PR_MeetingType_UpdateByPK", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MeetingTypeID", model.MeetingTypeId);
+                    cmd.Parameters.AddWithValue("@MeetingTypeName", model.MeetingTypeName ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@Remarks", model.Remarks ?? string.Empty);
                 }
-                
-                return RedirectToAction("MeetingTypeList");
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = model.MeetingTypeId == 0
+                    ? "Meeting type added successfully!"
+                    : "Meeting type updated successfully!";
             }
-            
-            // If model is not valid, return to form with errors
-            return View("MeetingTypeAddEdit", model);
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error saving meeting type: " + ex.Message;
+                return View("MeetingTypeAddEdit", model);
+            }
+
+            return RedirectToAction("MeetingTypeList");
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var meetingType = _meetingTypes.FirstOrDefault(mt => mt.MeetingTypeId == id);
-            if (meetingType != null)
+            try
             {
-                _meetingTypes.Remove(meetingType);
-                TempData["SuccessMessage"] = "Meeting type deleted successfully!";
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_MeetingType_DeleteByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@MeetingTypeID", id);
+
+                con.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = rowsAffected > 0
+                    ? "Meeting type deleted successfully!"
+                    : "Meeting type not found.";
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Meeting type not found!";
+                TempData["ErrorMessage"] = "Error deleting meeting type: " + ex.Message;
             }
-            
+
             return RedirectToAction("MeetingTypeList");
         }
     }

@@ -4,9 +4,16 @@ namespace NiceAdmin.Models
 {
     public class MeetingMemberViewModel
     {
+        [Key]
+        public int MeetingMemberId { get; set; }
+
         [Required]
         public int MeetingId { get; set; }
 
+        [Required]
+        public int StaffId { get; set; }
+
+        // Display properties
         [Required(ErrorMessage = "Meeting description is required.")]
         [StringLength(200, ErrorMessage = "Meeting description cannot exceed 200 characters.")]
         public string MeetingDescription { get; set; } = string.Empty;

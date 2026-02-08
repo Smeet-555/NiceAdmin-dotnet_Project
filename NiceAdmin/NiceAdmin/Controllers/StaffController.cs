@@ -1,116 +1,250 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using NiceAdmin.Models;
+using Microsoft.Data.SqlClient;
 
 namespace NiceAdmin.Controllers
 {
     public class StaffController : Controller
     {
-        // Static list to simulate database
-        private static List<StaffModelView> _staffList = new List<StaffModelView>
+        private readonly IConfiguration _configuration;
+
+        public StaffController(IConfiguration configuration)
         {
-            new StaffModelView
-            {
-                StaffId = 1,
-                StaffName = "John Doe",
-                DepartmentName = "IT",
-                MobileNo = "9876543210",
-                EmailAddress = "john.doe@company.com"
-            },
-            new StaffModelView
-            {
-                StaffId = 2,
-                StaffName = "Jane Smith",
-                DepartmentName = "HR",
-                MobileNo = "9123456780",
-                EmailAddress = "jane.smith@company.com"
-            },
-            new StaffModelView
-            {
-                StaffId = 3,
-                StaffName = "Michael Brown",
-                DepartmentName = "Finance",
-                MobileNo = "9988776655",
-                EmailAddress = "michael.brown@company.com"
-            }
-        };
+            _configuration = configuration;
+        }
+
+        public IActionResult Index()
+        {
+            return StaffList();
+        }
 
         public IActionResult StaffList()
         {
-            return View(_staffList);
+            List<StaffModelView> staffList = new();
+
+            try
+            {
+                var connectionString = _configuration.GetConnectionString("DefaultConnection");
+                
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    TempData["ErrorMessage"] = "Connection string is not configured!";
+                    return View("StaffList", staffList);
+                }
+
+                using SqlConnection con = new(connectionString);
+                using SqlCommand cmd = new("PR_Staff_SelectAll", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    staffList.Add(new StaffModelView
+                    {
+                        StaffId = Convert.ToInt32(reader["StaffID"]),
+                        StaffName = reader["StaffName"]?.ToString() ?? string.Empty,
+                        DepartmentId = Convert.ToInt32(reader["DepartmentID"]),
+                        MobileNo = reader["MobileNo"]?.ToString() ?? string.Empty,
+                        EmailAddress = reader["EmailAddress"]?.ToString() ?? string.Empty,
+                        Remarks = reader["Remarks"]?.ToString() ?? string.Empty,
+                        DepartmentName = reader["DepartmentName"]?.ToString() ?? string.Empty
+                    });
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                TempData["ErrorMessage"] = $"SQL Error: {sqlEx.Message} | Error Number: {sqlEx.Number} | Line: {sqlEx.LineNumber}";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.GetType().Name} - {ex.Message}";
+            }
+
+            return View("StaffList", staffList);
         }
 
+        [HttpGet]
         public IActionResult StaffAddEdit(int? id)
         {
-            if (id.HasValue)
+            // Load dropdown data
+            LoadDropdownData();
+
+            if (!id.HasValue || id == 0)
             {
-                // Edit mode - find the staff member
-                var staff = _staffList.FirstOrDefault(s => s.StaffId == id.Value);
-                if (staff == null)
+                return View(new StaffModelView
                 {
-                    return NotFound();
-                }
-                return View(staff);
+                    StaffId = 0
+                });
             }
-            else
+
+            StaffModelView model = null;
+
+            try
             {
-                // Add mode - create new staff member
-                var newStaff = new StaffModelView
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_Staff_SelectByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@StaffID", id.Value);
+
+                con.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
                 {
-                    StaffId = 0 // 0 indicates new record
-                };
-                return View(newStaff);
+                    model = new StaffModelView
+                    {
+                        StaffId = Convert.ToInt32(reader["StaffID"]),
+                        StaffName = reader["StaffName"]?.ToString() ?? string.Empty,
+                        DepartmentId = Convert.ToInt32(reader["DepartmentID"]),
+                        MobileNo = reader["MobileNo"]?.ToString() ?? string.Empty,
+                        EmailAddress = reader["EmailAddress"]?.ToString() ?? string.Empty,
+                        Remarks = reader["Remarks"]?.ToString() ?? string.Empty,
+                        DepartmentName = reader["DepartmentName"]?.ToString() ?? string.Empty
+                    };
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                TempData["ErrorMessage"] = $"SQL Error loading staff: {sqlEx.Message} | Error Number: {sqlEx.Number}";
+                return RedirectToAction("StaffList");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error loading staff member: {ex.Message}";
+                return RedirectToAction("StaffList");
+            }
+
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Staff member not found.";
+                return RedirectToAction("StaffList");
+            }
+
+            return View(model);
+        }
+
+        private void LoadDropdownData()
+        {
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                con.Open();
+
+                // Load Departments
+                var departments = new List<object>();
+                using (var cmd = new SqlCommand("PR_Department_SelectAll", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            departments.Add(new { Value = reader["DepartmentID"], Text = reader["DepartmentName"] });
+                        }
+                    }
+                }
+                ViewBag.Departments = departments;
+            }
+            catch (SqlException sqlEx)
+            {
+                TempData["ErrorMessage"] = $"SQL Error loading departments: {sqlEx.Message} | Error Number: {sqlEx.Number}";
+                ViewBag.Departments = new List<object>();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error loading dropdown data: {ex.Message}";
+                ViewBag.Departments = new List<object>();
             }
         }
 
         [HttpPost]
         public IActionResult Save(StaffModelView model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                LoadDropdownData();
+                return View("StaffAddEdit", model);
+            }
+
+            try
+            {
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                SqlCommand cmd;
+
                 if (model.StaffId == 0)
                 {
-                    // Add new staff
-                    model.StaffId = _staffList.Any() ? _staffList.Max(s => s.StaffId) + 1 : 1;
-                    _staffList.Add(model);
-                    
-                    TempData["SuccessMessage"] = "Staff member added successfully!";
+                    cmd = new SqlCommand("PR_Staff_Insert", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@DepartmentID", model.DepartmentId);
+                    cmd.Parameters.AddWithValue("@StaffName", model.StaffName ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@MobileNo", model.MobileNo ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@EmailAddress", model.EmailAddress ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@Remarks", model.Remarks ?? string.Empty);
                 }
                 else
                 {
-                    // Update existing staff
-                    var existingStaff = _staffList.FirstOrDefault(s => s.StaffId == model.StaffId);
-                    if (existingStaff != null)
-                    {
-                        existingStaff.StaffName = model.StaffName;
-                        existingStaff.DepartmentName = model.DepartmentName;
-                        existingStaff.MobileNo = model.MobileNo;
-                        existingStaff.EmailAddress = model.EmailAddress;
-                        
-                        TempData["SuccessMessage"] = "Staff member updated successfully!";
-                    }
+                    cmd = new SqlCommand("PR_Staff_UpdateByPK", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@StaffID", model.StaffId);
+                    cmd.Parameters.AddWithValue("@DepartmentID", model.DepartmentId);
+                    cmd.Parameters.AddWithValue("@StaffName", model.StaffName ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@MobileNo", model.MobileNo ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@EmailAddress", model.EmailAddress ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@Remarks", model.Remarks ?? string.Empty);
                 }
-                
-                return RedirectToAction("StaffList");
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = model.StaffId == 0
+                    ? "Staff member added successfully!"
+                    : "Staff member updated successfully!";
             }
-            
-            // If model is not valid, return to form with errors
-            return View("StaffAddEdit", model);
+            catch (SqlException sqlEx)
+            {
+                TempData["ErrorMessage"] = $"SQL Error saving staff: {sqlEx.Message} | Error Number: {sqlEx.Number}";
+                LoadDropdownData();
+                return View("StaffAddEdit", model);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error saving staff member: {ex.Message}";
+                LoadDropdownData();
+                return View("StaffAddEdit", model);
+            }
+
+            return RedirectToAction("StaffList");
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var staff = _staffList.FirstOrDefault(s => s.StaffId == id);
-            if (staff != null)
+            try
             {
-                _staffList.Remove(staff);
-                TempData["SuccessMessage"] = "Staff member deleted successfully!";
+                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlCommand cmd = new("PR_Staff_DeleteByPK", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@StaffID", id);
+
+                con.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                TempData["SuccessMessage"] = rowsAffected > 0
+                    ? "Staff member deleted successfully!"
+                    : "Staff member not found.";
             }
-            else
+            catch (SqlException sqlEx)
             {
-                TempData["ErrorMessage"] = "Staff member not found!";
+                TempData["ErrorMessage"] = $"SQL Error deleting staff: {sqlEx.Message} | Error Number: {sqlEx.Number}";
             }
-            
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting staff member: {ex.Message}";
+            }
+
             return RedirectToAction("StaffList");
         }
     }

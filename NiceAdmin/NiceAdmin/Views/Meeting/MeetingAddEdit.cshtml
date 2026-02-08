@@ -42,54 +42,63 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="MeetingVenueName" class="form-label">Meeting Venue *</label>
-                            <select asp-for="MeetingVenueName" class="form-select" required>
+                            <label asp-for="MeetingVenueId" class="form-label">Meeting Venue *</label>
+                            <select asp-for="MeetingVenueId" class="form-select" required>
                                 <option value="">Select Venue</option>
-                                <option value="Conference Room A">Conference Room A</option>
-                                <option value="Conference Room B">Conference Room B</option>
-                                <option value="Main Hall">Main Hall</option>
-                                <option value="Training Room">Training Room</option>
-                                <option value="Board Room">Board Room</option>
-                                <option value="Online Meeting">Online Meeting</option>
+                                @if (ViewBag.MeetingVenues != null)
+                                {
+                                    foreach (dynamic venue in ViewBag.MeetingVenues)
+                                    {
+                                        <option value="@venue.Value">@venue.Text</option>
+                                    }
+                                }
                             </select>
-                            <span asp-validation-for="MeetingVenueName" class="text-danger"></span>
+                            <span asp-validation-for="MeetingVenueId" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 Please select a meeting venue.
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="MeetingTypeName" class="form-label">Meeting Type *</label>
-                            <select asp-for="MeetingTypeName" class="form-select" required>
+                            <label asp-for="MeetingTypeId" class="form-label">Meeting Type *</label>
+                            <select asp-for="MeetingTypeId" class="form-select" required>
                                 <option value="">Select Meeting Type</option>
-                                <option value="Project Meeting">Project Meeting</option>
-                                <option value="Management Meeting">Management Meeting</option>
-                                <option value="Training Session">Training Session</option>
-                                <option value="Team Meeting">Team Meeting</option>
-                                <option value="Board Meeting">Board Meeting</option>
-                                <option value="Client Meeting">Client Meeting</option>
+                                @if (ViewBag.MeetingTypes != null)
+                                {
+                                    foreach (dynamic type in ViewBag.MeetingTypes)
+                                    {
+                                        <option value="@type.Value">@type.Text</option>
+                                    }
+                                }
                             </select>
-                            <span asp-validation-for="MeetingTypeName" class="text-danger"></span>
+                            <span asp-validation-for="MeetingTypeId" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 Please select a meeting type.
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="DepartmentName" class="form-label">Department *</label>
-                            <select asp-for="DepartmentName" class="form-select" required>
+                            <label asp-for="DepartmentId" class="form-label">Department *</label>
+                            <select asp-for="DepartmentId" class="form-select" required>
                                 <option value="">Select Department</option>
-                                <option value="IT">IT</option>
-                                <option value="HR">HR</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Operations">Operations</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Sales">Sales</option>
+                                @if (ViewBag.Departments != null)
+                                {
+                                    foreach (dynamic dept in ViewBag.Departments)
+                                    {
+                                        <option value="@dept.Value">@dept.Text</option>
+                                    }
+                                }
                             </select>
-                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 Please select a department.
                             </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="MeetingDescription" class="form-label">Meeting Description</label>
+                            <textarea asp-for="MeetingDescription" class="form-control" rows="3" placeholder="Enter meeting description or agenda"></textarea>
+                            <span asp-validation-for="MeetingDescription" class="text-danger"></span>
                         </div>
 
                         <div class="col-md-12">
