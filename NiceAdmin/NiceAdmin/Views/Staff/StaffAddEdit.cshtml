@@ -61,10 +61,10 @@
 
                         <div class="col-md-6">
                             <label asp-for="MobileNo" class="form-label">Mobile Number *</label>
-                            <input asp-for="MobileNo" class="form-control" placeholder="Enter mobile number" required />
+                            <input asp-for="MobileNo" type="tel" class="form-control" placeholder="Enter 10 digit mobile number" pattern="[0-9]{10}" maxlength="10" required />
                             <span asp-validation-for="MobileNo" class="text-danger"></span>
                             <div class="invalid-feedback">
-                                Please provide a valid mobile number.
+                                Please provide a valid 10-digit mobile number.
                             </div>
                         </div>
 
@@ -75,6 +75,12 @@
                             <div class="invalid-feedback">
                                 Please provide a valid email address.
                             </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="Remarks" class="form-label">Remarks</label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3" placeholder="Enter remarks (optional)"></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
                         </div>
 
                         <div class="col-12">
@@ -106,7 +112,9 @@
                         <h6 class="alert-heading">Staff Guidelines:</h6>
                         <ul class="mb-0 small">
                             <li>Staff name should be unique</li>
+                            <li>Mobile number must be exactly 10 digits</li>
                             <li>Email address must be valid</li>
+                            <li>Select the department from dropdown</li>
                             <li>Fields marked with * are required</li>
                             <li>@(Model.StaffId == 0 ? "New staff member will be created" : "Existing staff member will be updated")</li>
                         </ul>

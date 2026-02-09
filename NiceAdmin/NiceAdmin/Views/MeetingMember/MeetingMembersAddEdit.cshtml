@@ -1,7 +1,7 @@
 @model NiceAdmin.Models.MeetingMemberViewModel
 
 @{
-    ViewData["Title"] = Model.MeetingId == 0 ? "Add Meeting Member" : "Edit Meeting Member";
+    ViewData["Title"] = Model.MeetingMemberId == 0 ? "Add Meeting Member" : "Edit Meeting Member";
 }
 
 <div class="pagetitle">
@@ -30,47 +30,41 @@
                     </h5>
 
                     <form asp-controller="MeetingMember" asp-action="Save" method="post" class="row g-3 needs-validation" novalidate>
-                        <input asp-for="MeetingId" type="hidden" />
+                        <input asp-for="MeetingMemberId" type="hidden" />
                         
                         <div class="col-md-12">
-                            <label asp-for="MeetingDescription" class="form-label">Meeting Description *</label>
-                            <input asp-for="MeetingDescription" class="form-control" placeholder="Enter meeting description" required />
-                            <span asp-validation-for="MeetingDescription" class="text-danger"></span>
+                            <label asp-for="MeetingId" class="form-label">Meeting *</label>
+                            <select asp-for="MeetingId" class="form-select" required>
+                                <option value="">Select Meeting</option>
+                                @if (ViewBag.Meetings != null)
+                                {
+                                    foreach (dynamic meeting in ViewBag.Meetings)
+                                    {
+                                        <option value="@meeting.Value">@meeting.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="MeetingId" class="text-danger"></span>
                             <div class="invalid-feedback">
-                                Please provide a valid meeting description.
+                                Please select a meeting.
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label asp-for="StaffName" class="form-label">Staff Member *</label>
-                            <select asp-for="StaffName" class="form-select" required>
-                                <option value="">Select Staff</option>
-                                <option value="John Doe">John Doe</option>
-                                <option value="Jane Smith">Jane Smith</option>
-                                <option value="Michael Brown">Michael Brown</option>
-                                <option value="Sarah Johnson">Sarah Johnson</option>
-                                <option value="David Wilson">David Wilson</option>
+                        <div class="col-md-12">
+                            <label asp-for="StaffId" class="form-label">Staff Member *</label>
+                            <select asp-for="StaffId" class="form-select" required>
+                                <option value="">Select Staff Member</option>
+                                @if (ViewBag.Staff != null)
+                                {
+                                    foreach (dynamic staff in ViewBag.Staff)
+                                    {
+                                        <option value="@staff.Value">@staff.Text</option>
+                                    }
+                                }
                             </select>
-                            <span asp-validation-for="StaffName" class="text-danger"></span>
+                            <span asp-validation-for="StaffId" class="text-danger"></span>
                             <div class="invalid-feedback">
                                 Please select a staff member.
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label asp-for="DepartmentName" class="form-label">Department *</label>
-                            <select asp-for="DepartmentName" class="form-select" required>
-                                <option value="">Select Department</option>
-                                <option value="IT">IT</option>
-                                <option value="HR">HR</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Operations">Operations</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Sales">Sales</option>
-                            </select>
-                            <span asp-validation-for="DepartmentName" class="text-danger"></span>
-                            <div class="invalid-feedback">
-                                Please select a department.
                             </div>
                         </div>
 
@@ -94,7 +88,7 @@
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-lg me-1"></i>
-                                    @(Model.MeetingId == 0 ? "Create Meeting Member" : "Update Meeting Member")
+                                    @(Model.MeetingMemberId == 0 ? "Add Meeting Member" : "Update Meeting Member")
                                 </button>
                                 <a asp-controller="MeetingMember" asp-action="MeetingMembersList" class="btn btn-secondary">
                                     <i class="bi bi-arrow-left me-1"></i>
@@ -117,10 +111,12 @@
                     <div class="alert alert-info">
                         <h6 class="alert-heading">Meeting Member Guidelines:</h6>
                         <ul class="mb-0 small">
-                            <li>Meeting description should be clear</li>
+                            <li>Select the meeting from the dropdown</li>
                             <li>Select the staff member attending</li>
+                            <li>Staff dropdown shows name and department</li>
+                            <li>Mark as present if the member attended</li>
                             <li>Fields marked with * are required</li>
-                            <li>@(Model.MeetingId == 0 ? "New meeting member will be created" : "Existing meeting member will be updated")</li>
+                            <li>@(Model.MeetingMemberId == 0 ? "New meeting member will be created" : "Existing meeting member will be updated")</li>
                         </ul>
                     </div>
                 </div>

@@ -93,14 +93,14 @@
                                     <td>@meetingmember.Remarks</td>
                                     <td class="text-center">
                                         <a asp-action="MeetingMembersAddEdit"
-                                           asp-route-id="@meetingmember.MeetingId"
+                                           asp-route-id="@meetingmember.MeetingMemberId"
                                            class="btn btn-sm btn-outline-primary me-1"
                                            title="Edit Meeting Member">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
                                         <button type="button" class="btn btn-sm btn-outline-danger"
-                                                onclick="confirmDelete(@meetingmember.MeetingId, '@meetingmember.StaffName')"
+                                                onclick="confirmDelete(@meetingmember.MeetingMemberId, '@meetingmember.StaffName')"
                                                 title="Delete Meeting Member">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -148,9 +148,9 @@
 </div>
 
     <script>
-        function confirmDelete(meetingId, memberName) {
+        function confirmDelete(meetingMemberId, memberName) {
             document.getElementById('memberNameToDelete').textContent = memberName;
-            document.getElementById('deleteForm').action = '@Url.Action("Delete", "MeetingMember")/' + meetingId;
+            document.getElementById('deleteForm').action = '@Url.Action("Delete", "MeetingMember")/' + meetingMemberId;
             
             var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
             deleteModal.show();

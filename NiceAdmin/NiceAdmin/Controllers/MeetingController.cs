@@ -314,7 +314,15 @@ namespace NiceAdmin.Controllers
             }
             catch (SqlException sqlEx)
             {
-                TempData["ErrorMessage"] = $"Database error deleting meeting: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+                // Check for foreign key constraint violation (Error 547)
+                if (sqlEx.Number == 547)
+                {
+                    TempData["ErrorMessage"] = "Cannot delete this meeting because it has meeting members assigned. Please delete the meeting members first.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = $"Database error deleting meeting: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+                }
             }
             catch (Exception ex)
             {

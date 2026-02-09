@@ -145,9 +145,17 @@ public class DepartmentController : Controller
     [HttpPost]
     public IActionResult Delete(int id)
     {
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
+        
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            TempData["ErrorMessage"] = "Database connection string is not configured. Please check appsettings.json";
+            return RedirectToAction("Index");
+        }
+
         try
         {
-            using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+            using SqlConnection con = new(connectionString);
             using SqlCommand cmd = new("PR_Department_DeleteByPK", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@DepartmentID", id);
@@ -159,9 +167,21 @@ public class DepartmentController : Controller
                 ? "Department deleted successfully!"
                 : "Department not found.";
         }
+        catch (SqlException sqlEx)
+        {
+            // Check for foreign key constraint violation (Error 547)
+            if (sqlEx.Number == 547)
+            {
+                TempData["ErrorMessage"] = "Cannot delete this department because it is being used by staff members or meetings. Please delete or update those records first.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Database error deleting department: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+            }
+        }
         catch (Exception ex)
         {
-            TempData["ErrorMessage"] = "Error deleting department: " + ex.Message;
+            TempData["ErrorMessage"] = $"Error deleting department: {ex.Message}";
         }
 
         return RedirectToAction("Index");

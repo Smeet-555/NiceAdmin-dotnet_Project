@@ -13,15 +13,15 @@ namespace NiceAdmin.Models
         public string StaffName { get; set; } = string.Empty;
 
         // Foreign Key
+        [Required(ErrorMessage = "Department is required.")]
         public int DepartmentId { get; set; }
 
-        // Display Name
-        [Required(ErrorMessage = "Department name is required.")]
+        // Display Name - not required for form submission
         [StringLength(100, ErrorMessage = "Department name cannot exceed 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Mobile number is required.")]
-        [Phone(ErrorMessage = "Invalid mobile number format.")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Mobile number must be exactly 10 digits.")]
         [StringLength(15, ErrorMessage = "Mobile number cannot exceed 15 characters.")]
         public string MobileNo { get; set; } = string.Empty;
 

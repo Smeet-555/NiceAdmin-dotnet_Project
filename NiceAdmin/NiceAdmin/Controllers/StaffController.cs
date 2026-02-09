@@ -222,9 +222,17 @@ namespace NiceAdmin.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                TempData["ErrorMessage"] = "Database connection string is not configured. Please check appsettings.json";
+                return RedirectToAction("StaffList");
+            }
+
             try
             {
-                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlConnection con = new(connectionString);
                 using SqlCommand cmd = new("PR_Staff_DeleteByPK", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@StaffID", id);
@@ -238,7 +246,15 @@ namespace NiceAdmin.Controllers
             }
             catch (SqlException sqlEx)
             {
-                TempData["ErrorMessage"] = $"SQL Error deleting staff: {sqlEx.Message} | Error Number: {sqlEx.Number}";
+                // Check for foreign key constraint violation (Error 547)
+                if (sqlEx.Number == 547)
+                {
+                    TempData["ErrorMessage"] = "Cannot delete this staff member because they are assigned to one or more meetings. Please remove them from those meetings first.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = $"Database error deleting staff: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+                }
             }
             catch (Exception ex)
             {

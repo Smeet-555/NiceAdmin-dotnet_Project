@@ -148,9 +148,17 @@ namespace NiceAdmin.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                TempData["ErrorMessage"] = "Database connection string is not configured. Please check appsettings.json";
+                return RedirectToAction("MeetingTypeList");
+            }
+
             try
             {
-                using SqlConnection con = new(_configuration.GetConnectionString("DefaultConnection"));
+                using SqlConnection con = new(connectionString);
                 using SqlCommand cmd = new("PR_MeetingType_DeleteByPK", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@MeetingTypeID", id);
@@ -162,9 +170,21 @@ namespace NiceAdmin.Controllers
                     ? "Meeting type deleted successfully!"
                     : "Meeting type not found.";
             }
+            catch (SqlException sqlEx)
+            {
+                // Check for foreign key constraint violation (Error 547)
+                if (sqlEx.Number == 547)
+                {
+                    TempData["ErrorMessage"] = "Cannot delete this meeting type because it is being used by one or more meetings. Please delete or update those meetings first.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = $"Database error deleting meeting type: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+                }
+            }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error deleting meeting type: " + ex.Message;
+                TempData["ErrorMessage"] = $"Error deleting meeting type: {ex.Message}";
             }
 
             return RedirectToAction("MeetingTypeList");

@@ -13,16 +13,13 @@ namespace NiceAdmin.Models
         [Required]
         public int StaffId { get; set; }
 
-        // Display properties
-        [Required(ErrorMessage = "Meeting description is required.")]
+        // Display properties - not required for form submission
         [StringLength(200, ErrorMessage = "Meeting description cannot exceed 200 characters.")]
         public string MeetingDescription { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Staff name is required.")]
         [StringLength(100, ErrorMessage = "Staff name cannot exceed 100 characters.")]
         public string StaffName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Department name is required.")]
         [StringLength(100, ErrorMessage = "Department name cannot exceed 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
 
