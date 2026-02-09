@@ -50,7 +50,6 @@ public class DepartmentController : Controller
     {
         if (!id.HasValue || id == 0)
         {
-            // Add mode - create new department
             return View(new DepartmentViewModel
             {
                 DepartmentId = 0,

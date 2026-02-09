@@ -45,7 +45,7 @@ namespace NiceAdmin.Controllers
                     meetings.Add(new MeetingViewModel
                     {
                         MeetingId = Convert.ToInt32(reader["MeetingID"]),
-                        MeetingDate = Convert.ToDateTime(reader["MeetingDate"]),
+                        MeetingDate = reader["MeetingDate"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["MeetingDate"]),
                         MeetingVenueName = reader["MeetingVenueName"] == DBNull.Value ? string.Empty : reader["MeetingVenueName"].ToString(),
                         MeetingTypeName = reader["MeetingTypeName"] == DBNull.Value ? string.Empty : reader["MeetingTypeName"].ToString(),
                         DepartmentName = reader["DepartmentName"] == DBNull.Value ? string.Empty : reader["DepartmentName"].ToString(),
@@ -105,12 +105,12 @@ namespace NiceAdmin.Controllers
                     model = new MeetingViewModel
                     {
                         MeetingId = Convert.ToInt32(reader["MeetingID"]),
-                        MeetingDate = Convert.ToDateTime(reader["MeetingDate"]),
-                        MeetingVenueId = Convert.ToInt32(reader["MeetingVenueID"]),
-                        MeetingTypeId = Convert.ToInt32(reader["MeetingTypeID"]),
-                        DepartmentId = Convert.ToInt32(reader["DepartmentID"]),
+                        MeetingDate = reader["MeetingDate"] == DBNull.Value ? DateTime.Today : Convert.ToDateTime(reader["MeetingDate"]),
+                        MeetingVenueId = reader["MeetingVenueID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["MeetingVenueID"]),
+                        MeetingTypeId = reader["MeetingTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["MeetingTypeID"]),
+                        DepartmentId = reader["DepartmentID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["DepartmentID"]),
                         MeetingDescription = reader["MeetingDescription"]?.ToString() ?? string.Empty,
-                        IsCancelled = Convert.ToBoolean(reader["IsCancelled"]),
+                        IsCancelled = reader["IsCancelled"] == DBNull.Value ? false : Convert.ToBoolean(reader["IsCancelled"]),
                         // Display names for showing in form
                         MeetingVenueName = reader["MeetingVenueName"]?.ToString() ?? string.Empty,
                         MeetingTypeName = reader["MeetingTypeName"]?.ToString() ?? string.Empty,

@@ -26,7 +26,7 @@ namespace NiceAdmin.Controllers
             try
             {
                 var connectionString = _configuration.GetConnectionString("DefaultConnection");
-                
+
                 if (string.IsNullOrEmpty(connectionString))
                 {
                     TempData["ErrorMessage"] = "Connection string is not configured!";
@@ -46,20 +46,26 @@ namespace NiceAdmin.Controllers
                     {
                         VenueId = Convert.ToInt32(reader["MeetingVenueID"]),
                         VenueName = reader["MeetingVenueName"]?.ToString() ?? string.Empty,
-                        Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
-                        Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                        Created = reader["Created"] == DBNull.Value
+                            ? DateTime.Now
+                            : Convert.ToDateTime(reader["Created"]),
+                        Modified = reader["Modified"] == DBNull.Value
+                            ? DateTime.Now
+                            : Convert.ToDateTime(reader["Modified"])
                     });
                 }
-                
+
                 TempData["SuccessMessage"] = $"Loaded {venues.Count} meeting venues successfully!";
             }
             catch (SqlException sqlEx)
             {
-                TempData["ErrorMessage"] = $"SQL Error: {sqlEx.Message} | Error Number: {sqlEx.Number} | Line: {sqlEx.LineNumber}";
+                TempData["ErrorMessage"] =
+                    $"SQL Error: {sqlEx.Message} | Error Number: {sqlEx.Number} | Line: {sqlEx.LineNumber}";
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.GetType().Name} - {ex.Message} | Stack: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace.Length))}";
+                TempData["ErrorMessage"] =
+                    $"Error: {ex.GetType().Name} - {ex.Message} | Stack: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace.Length))}";
             }
 
             return View("MeetingVenueList", venues);
@@ -96,8 +102,12 @@ namespace NiceAdmin.Controllers
                     {
                         VenueId = Convert.ToInt32(reader["MeetingVenueID"]),
                         VenueName = reader["MeetingVenueName"]?.ToString() ?? string.Empty,
-                        Created = reader["Created"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Created"]),
-                        Modified = reader["Modified"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(reader["Modified"])
+                        Created = reader["Created"] == DBNull.Value
+                            ? DateTime.Now
+                            : Convert.ToDateTime(reader["Created"]),
+                        Modified = reader["Modified"] == DBNull.Value
+                            ? DateTime.Now
+                            : Convert.ToDateTime(reader["Modified"])
                     };
                 }
             }
@@ -165,10 +175,11 @@ namespace NiceAdmin.Controllers
         public IActionResult Delete(int id)
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            
+
             if (string.IsNullOrEmpty(connectionString))
             {
-                TempData["ErrorMessage"] = "Database connection string is not configured. Please check appsettings.json";
+                TempData["ErrorMessage"] =
+                    "Database connection string is not configured. Please check appsettings.json";
                 return RedirectToAction("MeetingVenueList");
             }
 
@@ -191,11 +202,13 @@ namespace NiceAdmin.Controllers
                 // Check for foreign key constraint violation (Error 547)
                 if (sqlEx.Number == 547)
                 {
-                    TempData["ErrorMessage"] = "Cannot delete this meeting venue because it is being used by one or more meetings. Please delete or update those meetings first.";
+                    TempData["ErrorMessage"] =
+                        "Cannot delete this meeting venue because it is being used by one or more meetings. Please delete or update those meetings first.";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = $"Database error deleting meeting venue: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
+                    TempData["ErrorMessage"] =
+                        $"Database error deleting meeting venue: {sqlEx.Message} (Error Number: {sqlEx.Number}, Line: {sqlEx.LineNumber})";
                 }
             }
             catch (Exception ex)

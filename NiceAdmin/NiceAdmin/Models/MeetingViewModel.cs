@@ -13,20 +13,22 @@ namespace NiceAdmin.Models
         public DateTime MeetingDate { get; set; }
 
         // Foreign Keys
+        [Required(ErrorMessage = "Meeting venue is required.")]
         public int MeetingVenueId { get; set; }
+        
+        [Required(ErrorMessage = "Meeting type is required.")]
         public int MeetingTypeId { get; set; }
+        
+        [Required(ErrorMessage = "Department is required.")]
         public int DepartmentId { get; set; }
 
-        // Display Names
-        [Required(ErrorMessage = "Meeting venue is required.")]
+        // Display Names - not required for form submission
         [StringLength(150, ErrorMessage = "Meeting venue name cannot exceed 150 characters.")]
         public string MeetingVenueName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Meeting type is required.")]
         [StringLength(100, ErrorMessage = "Meeting type name cannot exceed 100 characters.")]
         public string MeetingTypeName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Department name is required.")]
         [StringLength(100, ErrorMessage = "Department name cannot exceed 100 characters.")]
         public string DepartmentName { get; set; } = string.Empty;
 
